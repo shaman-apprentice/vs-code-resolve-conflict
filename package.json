@@ -1,0 +1,43 @@
+{
+  "name": "resolve-conflict",
+  "license": "MIT",
+  "version": "0.0.1",
+  "description": "A view for resolving git merge conflicts",
+  "main": "out/extension.js",
+  "displayName": "Resolve git merge conflict",
+  "repository": "https://github.com/shaman-apprentice/vs-code-resolve-conflict",
+  "author": "shaman-apprentice",
+  "publisher": "shaman-apprentice",
+  "engines": {
+    "vscode": "^1.4.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "merge",
+    "resolve",
+    "conflict",
+    "git"
+  ],
+  "activationEvents": [
+    "onCommand:open-resolve-conflict"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "open-resolve-conflict",
+        "title": "open-resolve-conflict"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.8",
+    "@types/vscode": "^1.40.0",
+    "typescript": "^3.7.2"
+  }
+}
