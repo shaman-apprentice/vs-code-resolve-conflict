@@ -3,7 +3,10 @@ import * as vscode from 'vscode';
 import { removed as removedDecorationType } from '../text-editor-decoration/removed';
 import { getHover } from '../text-editor-decoration/hover';
 
-export const openResolveConflict = async () => {
+export const openResolveConflict = async (ctx: any) => {
+  if (!ctx || !ctx.resourceUri || !ctx.resourceUri.path) return;
+  console.log(ctx.resourceUri.path);
+
   const editor = vscode.window.activeTextEditor;
   if (!editor) return;
 
