@@ -27,9 +27,18 @@
     "commands": [
       {
         "command": "open-resolve-conflict",
-        "title": "open-resolve-conflict"
+        "title": "Resolve Conflicts",
+        "icon": "assets/boom.svg"
       }
-    ]
+    ],
+    "menus": {
+      "scm/resourceState/context": [
+        {
+          "command": "open-resolve-conflict",
+          "group": "inline"
+        }
+      ]
+    }
   },
   "scripts": {
     "compile": "tsc -p ./",
