@@ -6,10 +6,7 @@ export const openResolveConflict = async () => {
 
   editor.setDecorations(createDecoratorType(), [
     {
-      range: new vscode.Range(
-        new vscode.Position(2, 0),
-        new vscode.Position(3, 0)
-      ),
+      range: new vscode.Range(new vscode.Position(2, 0), new vscode.Position(3, 0)),
       hoverMessage: [getHover(), 'hi 2']
     }
   ]);
@@ -22,7 +19,7 @@ const createDecoratorType = () =>
   });
 
 const getHover = () => {
-  const cmd = vscode.Uri.parse('command:say-hi?[{"arg":"bla"}]');
+  const cmd = vscode.Uri.parse('command:open-local-changes');
   const hover = new vscode.MarkdownString(`[do something](${cmd})`);
   hover.isTrusted = true;
   return hover;
