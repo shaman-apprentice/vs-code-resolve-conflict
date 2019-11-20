@@ -2,14 +2,13 @@ import * as vscode from 'vscode';
 
 import { removed as removedDecorationType } from '../text-editor-decoration/removed';
 import { getHover } from '../text-editor-decoration/hover';
-import { initConflictData } from '../conflict-data-manager';
-import { open as openEditors } from '../utilities/editors';
+import { StateManager } from '../utilities/state-manager';
 
 export const openResolveConflict = async (ctx: any) => {
   if (!ctx || !ctx.resourceUri || !ctx.resourceUri.fsPath) return;
 
-  const conflictData = initConflictData(ctx.resourceUri.fsPath);
-  await openEditors();
+  // todo if already open update / else init
+  await StateManager.init(ctx.resourceUri.fsPath);
 
   // const editor = vscode.window.activeTextEditor;
   // if (!editor) return;

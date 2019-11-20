@@ -1,5 +1,5 @@
-import * as vscode from 'vscode';
+import { StateManager } from '../utilities/state-manager';
 
 export const applyResolveConflict = async (ctx: any) => {
-  console.log('hi from apply resolve conflict');
+  await StateManager.save();
 };

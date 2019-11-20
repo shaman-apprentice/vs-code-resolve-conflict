@@ -5,13 +5,17 @@ import { MERGE_RESULT_SCHEME } from '../virtual-documents/merge-result';
 import { REMOTE_CHANGES_SCHEME } from '../virtual-documents/remote-changes';
 
 export const open = async () => {
-  const localChangesEditor = await openLocalChangesEditor();
-  const mergeResultEditor = await openMergeResultEditor();
-  const serverChangesEditor = await openServerChangesEditor();
-  return { localChangesEditor, mergeResultEditor, serverChangesEditor };
+  const localChanges = await openLocalChanges();
+  const mergeResult = await openMergeResult();
+  const serverChanges = await openServerChanges();
+  return { localChanges, mergeResult, serverChanges };
 };
 
-const openLocalChangesEditor = async () => {
+export const close = async (editors: vscode.TextEditor[]) => {
+  await Promise.all(editors.map(editor => editor.hide()));
+};
+
+const openLocalChanges = async () => {
   const uri = vscode.Uri.parse(LOCAL_CHANGES_SCHEME + ':Local changes (read only)');
   const document = await vscode.workspace.openTextDocument(uri);
   return vscode.window.showTextDocument(document, {
@@ -21,7 +25,7 @@ const openLocalChangesEditor = async () => {
   });
 };
 
-const openMergeResultEditor = async () => {
+const openMergeResult = async () => {
   const uri = vscode.Uri.parse(MERGE_RESULT_SCHEME + ':Merge Result');
   const document = await vscode.workspace.openTextDocument(uri);
   return vscode.window.showTextDocument(document, {
@@ -30,7 +34,7 @@ const openMergeResultEditor = async () => {
   });
 };
 
-const openServerChangesEditor = async () => {
+const openServerChanges = async () => {
   const uri = vscode.Uri.parse(
     REMOTE_CHANGES_SCHEME + ':Remote Changes (read only)'
   );

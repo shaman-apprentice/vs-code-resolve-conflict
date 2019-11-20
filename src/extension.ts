@@ -44,5 +44,4 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
   console.log('hi from deactivating');
-  // todo close editors if open
 }
