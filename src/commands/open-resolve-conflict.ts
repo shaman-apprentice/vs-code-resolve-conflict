@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { removed as removedDecorationType } from '../text-editor-decoration/removed';
 import { getHover } from '../text-editor-decoration/hover';
 import { initConflictData } from '../conflict-data-manager';
-import { open as openEditors } from './editors';
+import { open as openEditors } from '../utilities/editors';
 
 export const openResolveConflict = async (ctx: any) => {
   if (!ctx || !ctx.resourceUri || !ctx.resourceUri.fsPath) return;

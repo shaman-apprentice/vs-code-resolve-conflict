@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 
-import { openResolveConflict } from './commands/open-resolve-conflict.command';
+import { openResolveConflict } from './commands/open-resolve-conflict';
+import { applyResolveConflict } from './commands/apply-resolve-conflict';
 
 import {
   LOCAL_CHANGES_SCHEME,
@@ -19,6 +20,10 @@ export function activate(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand(
     'open-resolve-conflict',
     openResolveConflict
+  );
+  const s = vscode.commands.registerCommand(
+    'apply-resolve-conflict',
+    applyResolveConflict
   );
 
   vscode.workspace.registerTextDocumentContentProvider(
@@ -39,4 +44,5 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
   console.log('hi from deactivating');
+  // todo close editors if open
 }

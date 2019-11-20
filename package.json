@@ -29,6 +29,11 @@
         "command": "open-resolve-conflict",
         "title": "Resolve Conflicts",
         "icon": "assets/boom.svg"
+      },
+      {
+        "command": "apply-resolve-conflict",
+        "title": "Apply changes",
+        "icon": "assets/boom.svg"
       }
     ],
     "menus": {
@@ -36,6 +41,13 @@
         {
           "command": "open-resolve-conflict",
           "group": "inline"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "apply-resolve-conflict",
+          "group": "navigation",
+          "when": "resourceScheme  == shaman-apprentice_resolve-conflict_merge-result-scheme"
         }
       ]
     }
