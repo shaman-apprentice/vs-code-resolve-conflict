@@ -7,7 +7,7 @@
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "args": [
-        "${workspaceFolder}/integration-tests",
+        "${workspaceFolder}/../git-conflict",
         "--disable-extensions",
         "--extensionDevelopmentPath=${workspaceFolder}"
       ],
