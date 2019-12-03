@@ -33,7 +33,7 @@
       {
         "command": "apply-resolve-conflict",
         "title": "Apply changes",
-        "icon": "assets/boom.svg"
+        "icon": "assets/fire-extinguisher.svg"
       }
     ],
     "menus": {
