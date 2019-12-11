@@ -6,6 +6,6 @@ export const MERGE_RESULT_SCHEME =
 
 export class MergeResultProvider implements vscode.TextDocumentContentProvider {
   provideTextDocumentContent(uri: vscode.Uri) {
-    return StateManager.conflict.mereResult;
+    return StateManager.conflict.mergeResult;
   }
 }
