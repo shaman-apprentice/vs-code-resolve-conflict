@@ -11,8 +11,8 @@ export const open = async () => {
   return { localChanges, mergeResult, serverChanges };
 };
 
-export const close = async (editors: vscode.TextEditor[]) => {
-  await Promise.all(editors.map(editor => editor.hide()));
+export const close = (editors: vscode.TextEditor[]) => {
+  return Promise.all(editors.map(editor => editor.hide()));
 };
 
 const openLocalChanges = async () => {
@@ -21,7 +21,6 @@ const openLocalChanges = async () => {
   return vscode.window.showTextDocument(document, {
     preview: false,
     preserveFocus: true,
-    // viewColumn: vscode.ViewColumn.Beside,
   });
 };
 
