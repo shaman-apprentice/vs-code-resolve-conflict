@@ -40,7 +40,8 @@
       "scm/resourceState/context": [
         {
           "command": "open-resolve-conflict",
-          "group": "inline"
+          "group": "inline",
+          "when": "scmProvider == git && scmResourceGroup == merge"
         }
       ],
       "editor/title": [

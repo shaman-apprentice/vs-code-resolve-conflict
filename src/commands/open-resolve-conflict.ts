@@ -1,12 +1,21 @@
 import * as vscode from 'vscode';
 
-import { removed as removedDecorationType } from '../text-editor-decoration/removed';
-import { getHover } from '../text-editor-decoration/hover';
 import { StateManager } from '../utilities/state-manager';
 
 export const openResolveConflict = async (ctx: any) => {
-  if (!ctx || !ctx.resourceUri || !ctx.resourceUri.fsPath) return;
+  const fsPath = getFsPath(ctx);
+  if (!fsPath) return;
 
-  await StateManager.init(ctx.resourceUri.fsPath);
+  await StateManager.init(fsPath);
   StateManager.applyDecorations();
+};
+
+const getFsPath = (ctx?: any) => {
+  if (ctx) return ctx.resourceUri.fsPath;
+
+  if (vscode.window.activeTextEditor)
+    // todo check if it has conflicts somewhere - else skip
+    return vscode.window.activeTextEditor.document.fileName;
+
+  return null;
 };
