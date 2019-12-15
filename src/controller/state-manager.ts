@@ -9,10 +9,9 @@ export class StateManager {
   public static editors: any;
   public static conflict: IConflict;
 
-  public static async init(filePath: string) {
-    StateManager.conflict = await initConflict(filePath);
+  public static async init(fsPath: string) {
+    StateManager.conflict = await initConflict(fsPath);
     StateManager.editors = await openEditors();
-    StateManager.applyDecorations();
   }
 
   public static applyDecorations() {
