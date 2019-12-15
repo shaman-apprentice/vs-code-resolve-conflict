@@ -6,6 +6,9 @@ Technical questions:
 
 Todos:
 
+- Make "merge result" text document editable!
+- Add syntax highlighting (file extension?)
+
 - readme + demo gif
 - minify code as pre-publish
 - show next conflict (in overview lane as well)
