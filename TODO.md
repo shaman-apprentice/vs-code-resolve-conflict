@@ -7,12 +7,10 @@ Technical questions:
 Todos:
 
 - Make "merge result" text document editable!
-- Add syntax highlighting (file extension?)
 
 - readme + demo gif
 - minify code as pre-publish
 - show next conflict (in overview lane as well)
-- when and how to deactivate
 - sync scrolling
 - vscode.setEditorLayout for setting 3 way and restoring old on close
 - add dismiss option

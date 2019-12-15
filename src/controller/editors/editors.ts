@@ -1,11 +1,21 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 
-import { SCHEMA, PATHS } from '../../virtual-documents/resolve-conflict';
+import { SCHEMA, types } from '../../virtual-documents/resolve-conflict';
 
-export const open = async () => {
-  const localChanges = await openLocalChanges();
-  const mergeResult = await openMergeResult();
-  const remoteChanges = await openRemoteChanges();
+export const open = async (fsPath: string) => {
+  const { name, ext } = path.parse(fsPath);
+
+  const localChanges = await openLocalChanges(
+    `${name} (LOCAL)${ext}?${types.local}`
+  );
+  const mergeResult = await openMergeResult(
+    `${name} (Merge Result)${ext}?${types.result}`
+  );
+  const remoteChanges = await openRemoteChanges(
+    `${name} (REMOTE)${ext}?${types.remote}`
+  );
+
   return { localChanges, mergeResult, remoteChanges };
 };
 
@@ -13,24 +23,24 @@ export const close = (editors: vscode.TextEditor[]) => {
   return Promise.all(editors.map(editor => editor.hide()));
 };
 
-const openLocalChanges = async () => {
-  const document = await getDocument(PATHS.localChanges);
+const openLocalChanges = async (path: string) => {
+  const document = await getDocument(path);
   return vscode.window.showTextDocument(document, {
     preview: false,
     preserveFocus: true,
   });
 };
 
-const openMergeResult = async () => {
-  const document = await getDocument(PATHS.mergeResult);
+const openMergeResult = async (path: string) => {
+  const document = await getDocument(path);
   return vscode.window.showTextDocument(document, {
     preview: false,
     viewColumn: vscode.ViewColumn.Beside,
   });
 };
 
-const openRemoteChanges = async () => {
-  const document = await getDocument(PATHS.remoteChanges);
+const openRemoteChanges = async (path: string) => {
+  const document = await getDocument(path);
   return vscode.window.showTextDocument(document, {
     preview: false,
     viewColumn: vscode.ViewColumn.Beside,

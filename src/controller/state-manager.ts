@@ -11,7 +11,7 @@ export class StateManager {
 
   public static async init(fsPath: string) {
     StateManager.conflict = await initConflict(fsPath);
-    StateManager.editors = await openEditors();
+    StateManager.editors = await openEditors(fsPath);
   }
 
   public static applyDecorations() {

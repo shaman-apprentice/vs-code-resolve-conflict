@@ -8,39 +8,36 @@ import {
 } from '../controller/editors/content';
 
 export const SCHEMA = 'shaman-apprentice_resolve-conflict_schema';
-
-export const PATHS = Object.freeze({
-  localChanges: 'Local changes (read only)',
-  mergeResult: 'Merge Result',
-  remoteChanges: 'Remote changes (read only)',
+export const types = Object.freeze({
+  local: 'local',
+  result: 'result',
+  remote: 'remote',
 });
 
 export class ResolveConflictProvider implements vscode.TextDocumentContentProvider {
   private static instance: ResolveConflictProvider | undefined;
 
   private onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
-  onDidChange = this.onDidChangeEmitter.event; // todo private possible?
+  public onDidChange = this.onDidChangeEmitter.event;
 
   constructor() {
     ResolveConflictProvider.instance = this;
   }
 
   static updateContent() {
-    if (!ResolveConflictProvider.instance) return;
-
-    Object.values(PATHS).forEach(p => {
-      const uri = vscode.Uri.parse(`${SCHEMA}:${p}`);
+    Object.values(StateManager.editors).forEach((e: any) => {
+      const uri = e.document.uri;
       ResolveConflictProvider.instance!.onDidChangeEmitter.fire(uri);
     });
   }
 
   provideTextDocumentContent(uri: vscode.Uri) {
-    switch (uri.path) {
-      case PATHS.localChanges:
+    switch (uri.query) {
+      case types.local:
         return getLocalChanges(StateManager.conflict);
-      case PATHS.mergeResult:
+      case types.result:
         return getMergeResult(StateManager.conflict);
-      case PATHS.remoteChanges:
+      case types.remote:
         return getRemoteChanges(StateManager.conflict);
     }
   }
