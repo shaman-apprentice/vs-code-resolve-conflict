@@ -52,7 +52,7 @@
         {
           "command": "apply-resolve-conflict",
           "group": "navigation",
-          "when": "resourceScheme  == shaman-apprentice_resolve-conflict_merge-result-scheme"
+          "when": "resourceScheme  == shaman-apprentice_resolve-conflict_schema"
         }
       ]
     }

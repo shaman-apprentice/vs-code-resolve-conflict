@@ -31,7 +31,7 @@ export class StateManager {
     await closeEditors([
       StateManager.editors.localChanges,
       StateManager.editors.mergeResult,
-      StateManager.editors.serverChanges,
+      StateManager.editors.remoteChanges,
     ]);
   }
 }

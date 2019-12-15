@@ -1,14 +1,12 @@
 import * as vscode from 'vscode';
 
-import { LOCAL_CHANGES_SCHEME } from '../../virtual-documents/local-changes';
-import { MERGE_RESULT_SCHEME } from '../../virtual-documents/merge-result';
-import { REMOTE_CHANGES_SCHEME } from '../../virtual-documents/remote-changes';
+import { SCHEMA, PATHS } from '../../virtual-documents/resolve-conflict';
 
 export const open = async () => {
   const localChanges = await openLocalChanges();
   const mergeResult = await openMergeResult();
-  const serverChanges = await openServerChanges();
-  return { localChanges, mergeResult, serverChanges };
+  const remoteChanges = await openRemoteChanges();
+  return { localChanges, mergeResult, remoteChanges };
 };
 
 export const close = (editors: vscode.TextEditor[]) => {
@@ -16,8 +14,7 @@ export const close = (editors: vscode.TextEditor[]) => {
 };
 
 const openLocalChanges = async () => {
-  const uri = vscode.Uri.parse(LOCAL_CHANGES_SCHEME + ':Local changes (read only)');
-  const document = await vscode.workspace.openTextDocument(uri);
+  const document = await getDocument(PATHS.localChanges);
   return vscode.window.showTextDocument(document, {
     preview: false,
     preserveFocus: true,
@@ -25,21 +22,22 @@ const openLocalChanges = async () => {
 };
 
 const openMergeResult = async () => {
-  const uri = vscode.Uri.parse(MERGE_RESULT_SCHEME + ':Merge Result');
-  const document = await vscode.workspace.openTextDocument(uri);
+  const document = await getDocument(PATHS.mergeResult);
   return vscode.window.showTextDocument(document, {
     preview: false,
     viewColumn: vscode.ViewColumn.Beside,
   });
 };
 
-const openServerChanges = async () => {
-  const uri = vscode.Uri.parse(
-    REMOTE_CHANGES_SCHEME + ':Remote Changes (read only)'
-  );
-  const document = await vscode.workspace.openTextDocument(uri);
+const openRemoteChanges = async () => {
+  const document = await getDocument(PATHS.remoteChanges);
   return vscode.window.showTextDocument(document, {
     preview: false,
     viewColumn: vscode.ViewColumn.Beside,
   });
+};
+
+const getDocument = (path: string) => {
+  const uri = vscode.Uri.parse(`${SCHEMA}:${path}`);
+  return vscode.workspace.openTextDocument(uri);
 };
