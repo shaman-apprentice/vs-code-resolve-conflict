@@ -29,13 +29,8 @@ export const handleSingleConflict = async (args: IHandleSingleConflictArgs) => {
         ...resolvingConflict.addedLines
       );
     }
+    // todo other cases
   }
 
   ResolveConflictProvider.updateContent();
-
-  setTimeout(() => {
-    StateManager.applyDecorations();
-  }, 1000);
-
-  // todo other cases
 };

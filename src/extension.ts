@@ -8,6 +8,7 @@ import {
   ResolveConflictProvider,
   SCHEMA,
 } from './virtual-documents/resolve-conflict';
+import { StateManager } from './controller/state-manager';
 
 export function activate(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand(
@@ -23,6 +24,12 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(disposable); // todo what exactly is this?
+
+  vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
+    if (e.document.uri.scheme !== SCHEMA) return;
+
+    StateManager.applyDecorations();
+  });
 }
 
 export function deactivate() {
