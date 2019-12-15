@@ -19,7 +19,7 @@ export const getCommonAncestorContent = (filePath: string) => {
   return execCmd(`git show :1:${path.basename(filePath)}`, path.dirname(filePath));
 };
 
-/** returns [ancestorObjectId, localObjectId, remoteObjectId] */
+/** @returns [ancestorObjectId, localObjectId, remoteObjectId] */
 export const getConflictObjectIds = async (filePath: string): Promise<string[]> => {
   const output = await execCmd(
     `git ls-files -s ${path.basename(filePath)}`,

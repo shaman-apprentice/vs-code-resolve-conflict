@@ -34,6 +34,10 @@
         "command": "apply-resolve-conflict",
         "title": "Apply changes",
         "icon": "assets/fire-extinguisher.svg"
+      },
+      {
+        "command": "handle-single-conflict",
+        "title": "Handle Single Conflict"
       }
     ],
     "menus": {

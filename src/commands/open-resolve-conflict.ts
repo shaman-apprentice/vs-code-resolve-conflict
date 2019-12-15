@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { StateManager } from '../utilities/state-manager';
+import { StateManager } from '../controller/state-manager';
 
 export const openResolveConflict = async (ctx: any) => {
   const fsPath = getFsPath(ctx);

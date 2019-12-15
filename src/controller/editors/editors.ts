@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 
-import { LOCAL_CHANGES_SCHEME } from '../virtual-documents/local-changes';
-import { MERGE_RESULT_SCHEME } from '../virtual-documents/merge-result';
-import { REMOTE_CHANGES_SCHEME } from '../virtual-documents/remote-changes';
+import { LOCAL_CHANGES_SCHEME } from '../../virtual-documents/local-changes';
+import { MERGE_RESULT_SCHEME } from '../../virtual-documents/merge-result';
+import { REMOTE_CHANGES_SCHEME } from '../../virtual-documents/remote-changes';
 
 export const open = async () => {
   const localChanges = await openLocalChanges();

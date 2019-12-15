@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 import { openResolveConflict } from './commands/open-resolve-conflict';
 import { applyResolveConflict } from './commands/apply-resolve-conflict';
+import { handleSingleConflict } from './commands/handle-single-conflict';
 
 import {
   LOCAL_CHANGES_SCHEME,
@@ -21,10 +22,8 @@ export function activate(context: vscode.ExtensionContext) {
     'open-resolve-conflict',
     openResolveConflict
   );
-  const s = vscode.commands.registerCommand(
-    'apply-resolve-conflict',
-    applyResolveConflict
-  );
+  vscode.commands.registerCommand('apply-resolve-conflict', applyResolveConflict);
+  vscode.commands.registerCommand('handle-single-conflict', handleSingleConflict);
 
   vscode.workspace.registerTextDocumentContentProvider(
     LOCAL_CHANGES_SCHEME,
