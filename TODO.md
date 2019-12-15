@@ -18,6 +18,3 @@ Todos:
 - add dismiss option
 - handle resolve-conflict cmd when not in merge-conflict state
 - check for cross-os usage of "\n" symbol
-
-- close views on exit
-- maybe only one text provider with uri args
