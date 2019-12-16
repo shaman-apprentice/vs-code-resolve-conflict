@@ -6,7 +6,7 @@ Technical questions:
 
 Todos:
 
-- Make "merge result" text document editable!
+- get manual edited lines of merge Result for matching it up with `StateManager.conflict`
 
 - readme + demo gif
 - minify code as pre-publish

@@ -1,12 +1,10 @@
-import * as vscode from 'vscode';
-
 import { StateManager } from '../controller/state-manager';
-import { ResolveConflictProvider } from '../virtual-documents/resolve-conflict';
+import { updateContent } from '../controller/editors/editors';
 
 export interface IHandleSingleConflictArgs {
   conflictNumber: number;
   shouldUse: boolean;
-  type: 'local' | 'remote';
+  type: 'local' | 'remote'; // todo enum from version-provider
 }
 
 export const handleSingleConflict = async (args: IHandleSingleConflictArgs) => {
@@ -32,5 +30,5 @@ export const handleSingleConflict = async (args: IHandleSingleConflictArgs) => {
     // todo other cases
   }
 
-  ResolveConflictProvider.updateContent();
+  updateContent();
 };
