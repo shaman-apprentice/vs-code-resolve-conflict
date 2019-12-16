@@ -14,11 +14,6 @@ export const open = async (fsPath: string) => {
   return { localChanges, mergeResult, remoteChanges };
 };
 
-export const updateContent = () => {
-  VersionProvider.updateContent();
-  MergeResultProvider.updateContent();
-};
-
 export const close = (editors: vscode.TextEditor[]) => {
   return Promise.all(editors.map(editor => editor.hide()));
 };

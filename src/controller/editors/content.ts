@@ -1,4 +1,6 @@
 import { IConflict } from '../conflict/conflict.interface';
+import { MergeResultProvider } from '../../virtual-documents/merge-result-provider';
+import { VersionProvider } from '../../virtual-documents/version-provider';
 
 export const getLocalChanges = (conflict: IConflict): string => {
   const contentLines = conflict.localChanges.reduce((acc: any, c) => {
@@ -18,4 +20,9 @@ export const getMergeResult = (conflict: IConflict): string => {
 
 export const getRemoteChanges = (conflict: IConflict): string => {
   return 'todo: static content so far';
+};
+
+export const fireContentChanged = () => {
+  VersionProvider.fireUpdateContent();
+  MergeResultProvider.fireUpdateContent();
 };

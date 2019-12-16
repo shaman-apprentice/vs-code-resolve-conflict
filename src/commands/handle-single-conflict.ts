@@ -1,5 +1,5 @@
 import { StateManager } from '../controller/state-manager';
-import { updateContent } from '../controller/editors/editors';
+import { fireContentChanged } from '../controller/editors/content';
 
 export interface IHandleSingleConflictArgs {
   conflictNumber: number;
@@ -30,5 +30,5 @@ export const handleSingleConflict = async (args: IHandleSingleConflictArgs) => {
     // todo other cases
   }
 
-  updateContent();
+  fireContentChanged();
 };

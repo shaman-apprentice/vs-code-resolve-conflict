@@ -2,27 +2,20 @@ import * as vscode from 'vscode';
 
 import { StateManager } from '../controller/state-manager';
 import { getMergeResult } from '../controller/editors/content';
+import { UpdatableDocument } from './updatable-document';
 
-export class MergeResultProvider implements vscode.FileSystemProvider {
+export class MergeResultProvider extends UpdatableDocument<vscode.FileChangeEvent[]>
+  implements vscode.FileSystemProvider {
   public static readonly scheme =
     'shaman-apprentice_resolve-conflict_merge-result_scheme';
 
-  private onDidChangeEmitter = new vscode.EventEmitter<vscode.FileChangeEvent[]>();
-  readonly onDidChangeFile = this.onDidChangeEmitter.event;
-
-  private static instance: MergeResultProvider | undefined;
-
-  constructor() {
-    MergeResultProvider.instance = this;
-  }
-
-  public static updateContent() {
-    MergeResultProvider.instance!.onDidChangeEmitter.fire([
-      {
-        type: vscode.FileChangeType.Changed,
-        uri: StateManager.editors.mergeResult.document.uri,
-      },
-    ]);
+  onDidChangeFile = this.onDidChange;
+  protected getChangeEvents() {
+    const changeEvent = {
+      type: vscode.FileChangeType.Changed,
+      uri: StateManager.editors.mergeResult.document.uri,
+    };
+    return [[changeEvent]];
   }
 
   readFile(uri: vscode.Uri): Uint8Array {

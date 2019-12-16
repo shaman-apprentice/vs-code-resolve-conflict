@@ -1,9 +1,12 @@
 import * as vscode from 'vscode';
-import { StateManager } from '../controller/state-manager';
 
+import { StateManager } from '../controller/state-manager';
 import { getLocalChanges, getRemoteChanges } from '../controller/editors/content';
 
-export class VersionProvider implements vscode.TextDocumentContentProvider {
+import { UpdatableDocument } from './updatable-document';
+
+export class VersionProvider extends UpdatableDocument<vscode.Uri>
+  implements vscode.TextDocumentContentProvider {
   public static readonly scheme =
     'shaman-apprentice_resolve-conflict_version_scheme';
   public static types = Object.freeze({
@@ -11,22 +14,11 @@ export class VersionProvider implements vscode.TextDocumentContentProvider {
     remote: 'remote',
   });
 
-  private static instance: VersionProvider | undefined;
-
-  private onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
-  public onDidChange = this.onDidChangeEmitter.event;
-
-  constructor() {
-    VersionProvider.instance = this;
-  }
-
-  static updateContent() {
-    VersionProvider.instance!.onDidChangeEmitter.fire(
-      StateManager.editors.localChanges.document.uri
-    );
-    VersionProvider.instance!.onDidChangeEmitter.fire(
-      StateManager.editors.remoteChanges.document.uri
-    );
+  protected getChangeEvents() {
+    return [
+      StateManager.editors.localChanges.document.uri,
+      StateManager.editors.remoteChanges.document.uri,
+    ];
   }
 
   provideTextDocumentContent(uri: vscode.Uri) {
