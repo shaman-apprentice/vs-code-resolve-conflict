@@ -20,7 +20,7 @@ export class StateManager {
   }
 
   public static async save() {
-    // todo save first
+    // todo save first and `git add thisFile`
     await StateManager.close();
   }
 
