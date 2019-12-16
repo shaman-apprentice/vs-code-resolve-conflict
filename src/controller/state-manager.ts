@@ -1,5 +1,3 @@
-import * as vscode from 'vscode';
-
 import { open as openEditors, close as closeEditors } from './editors/editors';
 import { init as initConflict } from './conflict/analyzer';
 import { IConflict } from './conflict/conflict.interface';
