@@ -2,7 +2,7 @@ Technical questions:
 
 - setCommandContext
 - namespaces (commands, schemas)
-- disposable commands
+- read in more detail about vscode url schema (should schema have the form of "name://"?)
 
 Todos:
 
