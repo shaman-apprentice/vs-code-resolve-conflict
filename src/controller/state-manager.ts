@@ -24,8 +24,8 @@ export class StateManager {
     await StateManager.close();
   }
 
-  public static async close() {
-    await closeEditors([
+  public static close() {
+    return closeEditors([
       StateManager.editors.localChanges,
       StateManager.editors.mergeResult,
       StateManager.editors.remoteChanges,

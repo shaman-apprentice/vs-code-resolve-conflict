@@ -31,13 +31,18 @@
         "icon": "assets/boom.svg"
       },
       {
+        "command": "handle-single-conflict",
+        "title": "Handle Single Conflict"
+      },
+      {
         "command": "apply-resolve-conflict",
         "title": "Apply changes",
         "icon": "assets/fire-extinguisher.svg"
       },
       {
-        "command": "handle-single-conflict",
-        "title": "Handle Single Conflict"
+        "command": "cancel-resolve-conflict",
+        "title": "Cancel",
+        "icon": "assets/cancel.svg"
       }
     ],
     "menus": {
@@ -51,6 +56,11 @@
       "editor/title": [
         {
           "command": "apply-resolve-conflict",
+          "group": "navigation",
+          "when": "resourceScheme  == shaman-apprentice_resolve-conflict_version_scheme || resourceScheme == shaman-apprentice_resolve-conflict_merge-result_scheme"
+        },
+        {
+          "command": "cancel-resolve-conflict",
           "group": "navigation",
           "when": "resourceScheme  == shaman-apprentice_resolve-conflict_version_scheme || resourceScheme == shaman-apprentice_resolve-conflict_merge-result_scheme"
         }

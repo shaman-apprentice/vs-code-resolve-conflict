@@ -14,9 +14,8 @@ export const open = async (fsPath: string) => {
   return { localChanges, mergeResult, remoteChanges };
 };
 
-export const close = (editors: vscode.TextEditor[]) => {
-  return Promise.all(editors.map(editor => editor.hide()));
-};
+export const close = (editors: vscode.TextEditor[]) =>
+  Promise.all(editors.map(editor => editor.hide()));
 
 const openLocalChanges = async (name: string, ext: string) => {
   const uri = `${VersionProvider.scheme}:${name} (LOCAL)${ext}?${VersionProvider.types.local}`;
