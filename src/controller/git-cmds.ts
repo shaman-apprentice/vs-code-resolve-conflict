@@ -21,11 +21,16 @@ export const getCommonAncestorContent = (filePath: string) => {
 
 /** @returns [ancestorObjectId, localObjectId, remoteObjectId] */
 export const getConflictObjectIds = async (filePath: string): Promise<string[]> => {
+  const fileName = path.basename(filePath);
   const output = await execCmd(
-    `git ls-files -s ${path.basename(filePath)}`,
+    `git ls-files -s ${fileName}`,
     path.dirname(filePath)
   );
-  return output.split('\n').map(line => line.split(' ')[1]);
+  return output
+    .split(fileName)
+    .map(line => line.trim())
+    .filter(line => line !== '')
+    .map(line => line.split(' ')[1]);
 };
 
 export const getDiff = (filePath: string, id1: string, id2: string) => {
