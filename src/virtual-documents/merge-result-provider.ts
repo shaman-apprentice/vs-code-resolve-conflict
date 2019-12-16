@@ -4,8 +4,8 @@ import { StateManager } from '../controller/state-manager';
 import { getMergeResult } from '../controller/editors/content';
 
 export class MergeResultProvider implements vscode.FileSystemProvider {
-  public static readonly schema =
-    'shaman-apprentice_resolve-conflict_merge-result_schema';
+  public static readonly scheme =
+    'shaman-apprentice_resolve-conflict_merge-result_scheme';
 
   private onDidChangeEmitter = new vscode.EventEmitter<vscode.FileChangeEvent[]>();
   readonly onDidChangeFile = this.onDidChangeEmitter.event;

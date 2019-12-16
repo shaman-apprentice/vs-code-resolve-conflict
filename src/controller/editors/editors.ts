@@ -24,7 +24,7 @@ export const close = (editors: vscode.TextEditor[]) => {
 };
 
 const openLocalChanges = async (name: string, ext: string) => {
-  const uri = `${VersionProvider.schema}:${name} (LOCAL)${ext}?${VersionProvider.types.local}`;
+  const uri = `${VersionProvider.scheme}:${name} (LOCAL)${ext}?${VersionProvider.types.local}`;
   const document = await vscode.workspace.openTextDocument(vscode.Uri.parse(uri));
   return vscode.window.showTextDocument(document, {
     preview: false,
@@ -33,7 +33,7 @@ const openLocalChanges = async (name: string, ext: string) => {
 };
 
 const openMergeResult = async (name: string, ext: string) => {
-  const uri = `${MergeResultProvider.schema}:/${name} (Merge Result)${ext}`;
+  const uri = `${MergeResultProvider.scheme}:/${name} (Merge Result)${ext}`;
   const document = await vscode.workspace.openTextDocument(vscode.Uri.parse(uri));
   return vscode.window.showTextDocument(document, {
     preview: false,
@@ -42,7 +42,7 @@ const openMergeResult = async (name: string, ext: string) => {
 };
 
 const openRemoteChanges = async (name: string, ext: string) => {
-  const uri = `${VersionProvider.schema}:${name} (REMOTE)${ext}?${VersionProvider.types.remote}`;
+  const uri = `${VersionProvider.scheme}:${name} (REMOTE)${ext}?${VersionProvider.types.remote}`;
   const document = await vscode.workspace.openTextDocument(vscode.Uri.parse(uri));
   return vscode.window.showTextDocument(document, {
     preview: false,

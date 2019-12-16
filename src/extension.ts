@@ -15,19 +15,25 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('handle-single-conflict', handleSingleConflict),
 
     vscode.workspace.registerTextDocumentContentProvider(
-      VersionProvider.schema,
+      VersionProvider.scheme,
       new VersionProvider()
     ),
     vscode.workspace.registerFileSystemProvider(
-      MergeResultProvider.schema,
+      MergeResultProvider.scheme,
       new MergeResultProvider()
     ),
 
     vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
-      console.log('hi from did change');
-      console.log(e.document.uri);
-      // todo handle decorations of versions and merge result
-      if (e.document.uri.scheme === VersionProvider.schema)
+      const scheme = e.document.uri.scheme;
+
+      if (scheme === MergeResultProvider.scheme) {
+        e.contentChanges.forEach(cC => {
+          // start := .line, .character
+          console.log(cC.range.start, cC.range.end, cC.text);
+        });
+      }
+
+      if (scheme === VersionProvider.scheme || scheme === MergeResultProvider.scheme)
         StateManager.applyDecorations();
     })
   );

@@ -1,12 +1,10 @@
 Technical questions:
 
 - setCommandContext
-- namespaces (commands, schemas)
-- read in more detail about vscode url schema (should schema have the form of "name://"?)
+- namespaces (commands, schemes)
+- read in more detail about vscode url scheme (should scheme have the form of "name://"?)
 
 Todos:
-
-- get manual edited lines of merge Result for matching it up with `StateManager.conflict`
 
 - readme + demo gif
 - minify code as pre-publish

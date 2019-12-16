@@ -4,7 +4,8 @@ import { StateManager } from '../controller/state-manager';
 import { getLocalChanges, getRemoteChanges } from '../controller/editors/content';
 
 export class VersionProvider implements vscode.TextDocumentContentProvider {
-  public static readonly schema = 'shaman-apprentice_version_schema';
+  public static readonly scheme =
+    'shaman-apprentice_resolve-conflict_version_scheme';
   public static types = Object.freeze({
     local: 'local',
     remote: 'remote',
