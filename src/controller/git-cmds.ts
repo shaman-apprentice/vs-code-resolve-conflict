@@ -15,17 +15,13 @@ const execCmd = (cmd: string, cwd: string): Promise<string> =>
     });
   });
 
-export const getCommonAncestorContent = (filePath: string) => {
-  return execCmd(`git show :1:${path.basename(filePath)}`, path.dirname(filePath));
-};
+export const getCommonAncestorContent = (fsPath: string) =>
+  execCmd(`git show :1:${path.basename(fsPath)}`, path.dirname(fsPath));
 
 /** @returns [ancestorObjectId, localObjectId, remoteObjectId] */
-export const getConflictObjectIds = async (filePath: string): Promise<string[]> => {
-  const fileName = path.basename(filePath);
-  const output = await execCmd(
-    `git ls-files -u ${fileName}`,
-    path.dirname(filePath)
-  );
+export const getConflictObjectIds = async (fsPath: string): Promise<string[]> => {
+  const fileName = path.basename(fsPath);
+  const output = await execCmd(`git ls-files -u ${fileName}`, path.dirname(fsPath));
   return output
     .split(fileName)
     .map(line => line.trim())
@@ -33,6 +29,5 @@ export const getConflictObjectIds = async (filePath: string): Promise<string[]> 
     .map(line => line.split(' ')[1]);
 };
 
-export const getDiff = (filePath: string, id1: string, id2: string) => {
-  return execCmd(`git diff --unified=0 ${id1} ${id2}`, path.dirname(filePath));
-};
+export const getDiff = (fsPath: string, id1: string, id2: string) =>
+  execCmd(`git diff --unified=0 ${id1} ${id2}`, path.dirname(fsPath));
