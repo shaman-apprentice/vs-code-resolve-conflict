@@ -4,47 +4,55 @@ import { removed as removedDecoration } from '../../text-editor-decoration/remov
 import { added as addedDecoration } from '../../text-editor-decoration/added';
 import { use as useHover } from '../../text-editor-decoration/hover';
 
-export const applyDecoration = (editor: vscode.TextEditor, cs: ILocalConflict[]) => {
-  // todo consider padding for aligning lines
-
-  const decorations = cs.reduce(
-    (acc: any, c, i) => {
-      if (c.removedLines.length)
-        acc.removed.push(getOpts(c.startLineRemoved, c.removedLines, i));
-
-      if (c.addedLines.length)
-        acc.added.push(getOpts(c.startLineAdded, c.addedLines, i));
-
-      return acc;
-    },
-    { removed: [], added: [] }
-  );
-
+export const applyDecoration = (
+  editor: vscode.TextEditor,
+  localConflicts: ILocalConflict[]
+) => {
+  const decorations = calcDecoOpts(localConflicts);
   editor.setDecorations(addedDecoration, decorations.added);
   editor.setDecorations(removedDecoration, decorations.removed);
 };
 
-const getOpts = (
+export const calcDecoOpts = (localConflicts: ILocalConflict[]) =>
+  localConflicts.reduce(
+    (acc: any, lc, i) => {
+      if (lc.removedLines.length) {
+        const start = lc.startLineRemoved + acc.addedLines;
+        const end = start + lc.removedLines.length - 1;
+        acc.removed.push(getDecoOpts(start, end, i));
+      }
+
+      if (lc.addedLines.length) {
+        const start = lc.startLineAdded + lc.removedLines.length + acc.addedLines;
+        const end = start + lc.addedLines.length - 1;
+        acc.added.push(getDecoOpts(start, end, i));
+      }
+
+      acc.addedLines += lc.addedLines.length;
+      return acc;
+    },
+    { removed: [], added: [], addedLines: 0 }
+  );
+
+const getDecoOpts = (
   start: number,
-  lines: any[],
-  i: number
-): vscode.DecorationOptions => {
-  return {
-    range: new vscode.Range(
-      new vscode.Position(start, 0),
-      new vscode.Position(start + lines.length, 0)
-    ),
-    hoverMessage: [
-      useHover({
-        shouldUse: true,
-        type: 'local',
-        conflictNumber: i,
-      }),
-      useHover({
-        shouldUse: false,
-        type: 'local',
-        conflictNumber: i,
-      }),
-    ],
-  };
-};
+  end: number,
+  conflictIndex: number
+): vscode.DecorationOptions => ({
+  range: new vscode.Range(
+    new vscode.Position(start, 0),
+    new vscode.Position(end, 0)
+  ),
+  hoverMessage: [
+    useHover({
+      shouldUse: true,
+      type: 'local',
+      conflictNumber: conflictIndex,
+    }),
+    useHover({
+      shouldUse: false,
+      type: 'local',
+      conflictNumber: conflictIndex,
+    }),
+  ],
+});
