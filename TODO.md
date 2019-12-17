@@ -6,8 +6,6 @@ Technical questions:
 
 MVP:
 
-- check for cross-os usage of "\n" symbol
-- add dismiss option
 - readme incl. demo gif
 - align lines / padding of three views
 - apply decorations to all 3 views
@@ -22,3 +20,4 @@ Nice to Haves:
 - show next conflict (in overview lane as well)
 - sync scrolling
 - vscode.setEditorLayout for setting 3 way and restoring old on close
+- consider user settings of '\n' (parsing from git, writing to vs code text document)
