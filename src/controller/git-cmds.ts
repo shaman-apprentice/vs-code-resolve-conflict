@@ -23,7 +23,7 @@ export const getCommonAncestorContent = (filePath: string) => {
 export const getConflictObjectIds = async (filePath: string): Promise<string[]> => {
   const fileName = path.basename(filePath);
   const output = await execCmd(
-    `git ls-files -s ${fileName}`,
+    `git ls-files -u ${fileName}`,
     path.dirname(filePath)
   );
   return output
