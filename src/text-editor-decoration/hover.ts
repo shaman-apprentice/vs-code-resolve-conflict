@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { IHandleSingleConflictArgs } from '../commands/handle-single-conflict';
 
-export const use = (args: IHandleSingleConflictArgs) => {
+export const createHover = (args: IHandleSingleConflictArgs) => {
   const description = args.shouldUse ? 'use' : "don't use";
   const cmd = getCmd(args);
   const hover = new vscode.MarkdownString(`[${description}](${cmd})`);

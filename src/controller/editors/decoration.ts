@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { ILocalConflict } from '../conflict/conflict.interface';
 import { removed as removedDecoration } from '../../text-editor-decoration/removed';
 import { added as addedDecoration } from '../../text-editor-decoration/added';
-import { use as useHover } from '../../text-editor-decoration/hover';
+import { createHover } from '../../text-editor-decoration/hover';
 
 export const applyDecoration = (
   editor: vscode.TextEditor,
@@ -44,14 +44,14 @@ const getDecoOpts = (
     new vscode.Position(end, 0)
   ),
   hoverMessage: [
-    useHover({
+    createHover({
       shouldUse: true,
       type: 'local',
       conflictNumber: conflictIndex,
     }),
-    useHover({
+    createHover({
       shouldUse: false,
-      type: 'local',
+      type: 'local', // todo
       conflictNumber: conflictIndex,
     }),
   ],
