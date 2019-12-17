@@ -11,7 +11,6 @@ MVP:
 - apply decorations to all 3 views
 - handle manual changes in mergeResult
 - implement save / apply changes
-  - show error if not all conflicts are resolved
 
 Nice to Haves:
 
