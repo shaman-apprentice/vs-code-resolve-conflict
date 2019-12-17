@@ -21,3 +21,4 @@ Nice to Haves:
 - sync scrolling
 - vscode.setEditorLayout for setting 3 way and restoring old on close
 - consider user settings of '\n' (parsing from git, writing to vs code text document)
+- custom line numbers and padding (create FR on github?) instead of simple adding new lines for aligning views
