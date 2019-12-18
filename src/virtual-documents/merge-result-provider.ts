@@ -25,7 +25,12 @@ export class MergeResultProvider implements vscode.FileSystemProvider {
   }
 
   readFile(uri: vscode.Uri): Uint8Array {
-    const content = getMergeResult(StateManager.conflict);
+    const content = getMergeResult(
+      StateManager.gitConflict.commonAncestor,
+      StateManager.manualAddedLines
+    )
+      .map(c => c.content)
+      .join('\n');
     return new TextEncoder().encode(content);
   }
 

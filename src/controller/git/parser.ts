@@ -1,32 +1,27 @@
-import {
-  getCommonAncestorContent,
-  getConflictObjectIds,
-  getDiff,
-} from '../git-cmds';
-import { IConflict, ILocalConflict } from './conflict.interface';
+import { getCommonAncestorContent, getConflictObjectIds, getDiff } from './git-cmds';
+import { IGitConflict, ISingleGitConflict } from '../../model/git-conflict';
 
-export const init = async (fsPath: string): Promise<IConflict> => {
-  const content = await getCommonAncestorContent(fsPath);
+export const parseGitConflict = async (fsPath: string): Promise<IGitConflict> => {
   const [ancestorId, localId, remoteId] = await getConflictObjectIds(fsPath);
 
   return {
     localChanges: parseDiff(await getDiff(fsPath, ancestorId, localId)),
-    mergeResult: content.split('\n'),
-    remoteChanges: 'todo - currently still a static string',
+    commonAncestor: (await getCommonAncestorContent(fsPath)).split('\n'),
+    remoteChanges: parseDiff(await getDiff(fsPath, ancestorId, remoteId)),
   };
 };
 
-export const parseDiff = (diff: string): ILocalConflict[] =>
+export const parseDiff = (diff: string): ISingleGitConflict[] =>
   diff
     .split('\n')
     .slice(4) // throw away fst 4 rows / meta data
-    .reduce((acc: ILocalConflict[], line) => {
+    .reduce((acc, line) => {
       if (line.startsWith('@')) {
         acc.push({
           // note that git starts line counting with one, but we represent lines as arrays and hence start with 0
-          startLineRemoved: parseInt(line.match(startLineRemovedRegEx)![1]) - 1,
+          startRemoved: parseInt(line.match(startLineRemovedRegEx)![1]) - 1,
           removedLines: [],
-          startLineAdded: parseInt(line.match(startLineAddedRegEx)![1]) - 1,
+          startAdded: parseInt(line.match(startLineAddedRegEx)![1]) - 1,
           addedLines: [],
         });
         return acc;
@@ -37,7 +32,7 @@ export const parseDiff = (diff: string): ILocalConflict[] =>
       if (line.startsWith('+')) current.addedLines.push(line.slice(1));
 
       return acc;
-    }, [] as ILocalConflict[]);
+    }, [] as ISingleGitConflict[]);
 
 const startLineRemovedRegEx = /-([0-9]*)/;
 const startLineAddedRegEx = /\+([0-9]*)/;

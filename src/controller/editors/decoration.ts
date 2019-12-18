@@ -1,28 +1,28 @@
 import * as vscode from 'vscode';
-import { ILocalConflict } from '../conflict/conflict.interface';
+import { ISingleGitConflict } from '../../model/git-conflict';
 import { removed as removedDecoration } from '../../text-editor-decoration/removed';
 import { added as addedDecoration } from '../../text-editor-decoration/added';
 import { createHover } from '../../text-editor-decoration/hover';
 
 export const applyDecoration = (
   editor: vscode.TextEditor,
-  localConflicts: ILocalConflict[]
+  localConflicts: ISingleGitConflict[]
 ) => {
   const decorations = calcDecoOpts(localConflicts);
   editor.setDecorations(addedDecoration, decorations.added);
   editor.setDecorations(removedDecoration, decorations.removed);
 };
 
-export const calcDecoOpts = (localConflicts: ILocalConflict[]) =>
+export const calcDecoOpts = (localConflicts: ISingleGitConflict[]) =>
   localConflicts.reduce(
     (acc: any, lc, i) => {
       if (lc.removedLines.length) {
-        const start = lc.startLineRemoved + acc.addedLines;
+        const start = lc.startRemoved + acc.addedLines;
         acc.removed.push(getDecoOpts(start, lc.removedLines, i));
       }
 
       if (lc.addedLines.length) {
-        const start = lc.startLineAdded + lc.removedLines.length + acc.addedLines;
+        const start = lc.startAdded + lc.removedLines.length + acc.addedLines;
         acc.added.push(getDecoOpts(start, lc.addedLines, i));
       }
 

@@ -1,5 +1,6 @@
 import { StateManager } from '../controller/state-manager';
-import { fireContentChanged } from '../controller/editors/content';
+import { VersionProvider } from '../virtual-documents/version-provider';
+import { MergeResultProvider } from '../virtual-documents/merge-result-provider';
 
 export interface IHandleSingleConflictArgs {
   conflictNumber: number;
@@ -8,7 +9,7 @@ export interface IHandleSingleConflictArgs {
 }
 
 export const handleSingleConflict = async (args: IHandleSingleConflictArgs) => {
-  const [resolvingConflict] = StateManager.conflict.localChanges.splice(
+  const [resolvingConflict] = StateManager.gitConflict.localChanges.splice(
     args.conflictNumber,
     1
   );
@@ -16,13 +17,13 @@ export const handleSingleConflict = async (args: IHandleSingleConflictArgs) => {
   if (args.type === 'local') {
     if (args.shouldUse) {
       // remove related lines
-      StateManager.conflict.mergeResult.splice(
-        resolvingConflict.startLineRemoved,
+      StateManager.gitConflict.commonAncestor.splice(
+        resolvingConflict.startRemoved,
         resolvingConflict.removedLines.length
       );
       // add related lines
-      StateManager.conflict.mergeResult.splice(
-        resolvingConflict.startLineAdded,
+      StateManager.gitConflict.commonAncestor.splice(
+        resolvingConflict.startAdded,
         0,
         ...resolvingConflict.addedLines
       );
@@ -30,5 +31,6 @@ export const handleSingleConflict = async (args: IHandleSingleConflictArgs) => {
     // todo other cases
   }
 
-  fireContentChanged();
+  VersionProvider.fireUpdateContent();
+  MergeResultProvider.fireUpdateContent();
 };

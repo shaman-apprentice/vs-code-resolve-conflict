@@ -4,15 +4,15 @@ describe('calculation of decorations', () => {
   it('calculates correct indexes for decorations', () => {
     const conflicts = [
       {
-        startLineRemoved: 2,
+        startRemoved: 2,
         removedLines: ['snd line'],
-        startLineAdded: 2,
+        startAdded: 2,
         addedLines: ['thrd line'],
       },
       {
-        startLineRemoved: 4,
+        startRemoved: 4,
         removedLines: ['5th line'],
-        startLineAdded: 4,
+        startAdded: 4,
         addedLines: ['fifth line'],
       },
     ];

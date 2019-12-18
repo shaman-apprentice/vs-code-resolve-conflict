@@ -1,4 +1,4 @@
-import { parseDiff } from './analyzer';
+import { parseDiff } from './parser';
 
 describe('parse `git diff --unified=0 ${id1} ${id2}` into `ILocalConflict[]`', () => {
   it('only single line diffs', () => {

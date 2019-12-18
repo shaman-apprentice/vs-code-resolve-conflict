@@ -1,37 +1,61 @@
-import { IConflict, ILocalConflict } from '../conflict/conflict.interface';
-import { MergeResultProvider } from '../../virtual-documents/merge-result-provider';
-import { VersionProvider } from '../../virtual-documents/version-provider';
+import { ISingleGitConflict } from '../../model/git-conflict';
+import { IMergeResultLine, IVersionLine } from '../../model/line';
 
-export const getLocalChanges = (conflict: IConflict): string =>
-  getTextContent(conflict.mergeResult, conflict.localChanges);
+/* 
+Parse flow from IGitConflict:
+1. get mergeResult lines: from common ancestor
+2. get localChange lines: from mergeResult and add needed padding-lines in both
+3. get remoteChanges lines: from merge Result and add needed padding-lines in all three
+*/
 
-export const getMergeResult = (conflict: IConflict): string =>
-  conflict.localChanges
+//TODO test first this before doing more
+
+/** returns localChanges and updates padding of mergeResultLines as side effect */
+export const getLocalChanges = (
+  commonAncestor: string[],
+  localChanges: ISingleGitConflict[],
+  mergeResultLines: IMergeResultLine[]
+): IVersionLine[] => {
+  const tmp: IVersionLine[] = commonAncestor.slice().map(line => ({
+    content: [line],
+    paddingBottom: 0,
+    wasAdded: false,
+  }));
+
+  return localChanges
     .slice()
-    .reverse()
-    .reduce((acc, localConflict) => {
-      const startPadding = localConflict.startLineAdded + 1;
-      const paddingSize = localConflict.addedLines.length;
-      acc.splice(startPadding, 0, ...Array(paddingSize).fill(''));
-      return acc;
-    }, conflict.mergeResult.slice())
-    .join('\n');
+    .reverse() // calculation of padding is easier when doing from the end
+    .reduce((acc, lc) => {
+      const addedLines = {
+        content: lc.addedLines,
+        paddingBottom: 0,
+        wasAdded: true,
+      };
 
-export const getRemoteChanges = (conflict: IConflict): string => {
+      if (lc.addedLines.length < lc.removedLines.length) {
+        addedLines.paddingBottom = lc.removedLines.length - lc.addedLines.length;
+      } else if (lc.addedLines.length > lc.removedLines.length) {
+        // add padding to related mergeResultLine
+      }
+
+      tmp.splice(lc.startRemoved, lc.removedLines.length);
+      tmp.splice(lc.startAdded, 0, addedLines);
+
+      return acc;
+    }, tmp);
+};
+
+export const getMergeResult = (
+  commonAncestor: string[],
+  manualAddedLines: [] // todo
+): IMergeResultLine[] =>
+  commonAncestor.map(line => ({
+    content: [line],
+    paddingBottom: 0,
+    wasRemoved: false,
+    wasManualAdded: false, // // todo add via reduce manualAddedLines
+  }));
+
+export const getRemoteChanges = (conflict: IGitConflict): string => {
   return 'todo: static content so far';
 };
-
-export const fireContentChanged = () => {
-  VersionProvider.fireUpdateContent();
-  MergeResultProvider.fireUpdateContent();
-};
-
-export const getTextContent = (commonAncestor: string[], lcs: ILocalConflict[]) =>
-  lcs
-    .slice() // cause .reverse in next line is an inplace operation - thx JS!
-    .reverse()
-    .reduce((acc, lc) => {
-      acc.splice(lc.startLineRemoved + lc.removedLines.length, 0, ...lc.addedLines);
-      return acc;
-    }, commonAncestor.slice())
-    .join('\n');

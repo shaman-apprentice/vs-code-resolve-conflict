@@ -7,8 +7,8 @@ export class VersionProvider implements vscode.TextDocumentContentProvider {
   public static readonly scheme =
     'shaman-apprentice_resolve-conflict_version_scheme';
   public static types = Object.freeze({
-    local: 'local',
-    remote: 'remote',
+    localChanges: 'localChanges',
+    remoteChanges: 'remoteChanges',
   });
 
   private onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
@@ -29,10 +29,10 @@ export class VersionProvider implements vscode.TextDocumentContentProvider {
 
   provideTextDocumentContent(uri: vscode.Uri) {
     switch (uri.query) {
-      case VersionProvider.types.local:
-        return getLocalChanges(StateManager.conflict);
-      case VersionProvider.types.remote:
-        return getRemoteChanges(StateManager.conflict);
+      case VersionProvider.types.localChanges:
+        return getLocalChanges(StateManager.gitConflict);
+      case VersionProvider.types.remoteChanges:
+        return getRemoteChanges(StateManager.gitConflict);
     }
   }
 }

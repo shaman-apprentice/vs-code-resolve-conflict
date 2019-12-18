@@ -14,6 +14,7 @@ MVP:
 
 Nice to Haves:
 
+- deco for "padding" lines
 - make color (including icon svg) customizable
 - integration tests with a git-repo which has merge conflicts
 - minify code as pre-publish

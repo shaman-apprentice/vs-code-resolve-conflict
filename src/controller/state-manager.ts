@@ -1,21 +1,24 @@
 import { open as openEditors, close as closeEditors } from './editors/editors';
-import { init as initConflict } from './conflict/analyzer';
-import { IConflict } from './conflict/conflict.interface';
+import { parseGitConflict } from './git/parser';
 import { applyDecoration } from './editors/decoration';
+import { IGitConflict } from '../model/git-conflict';
+import { IEditors } from '../model/editors';
 
 export class StateManager {
-  public static editors: any;
-  public static conflict: IConflict;
+  public static gitConflict: IGitConflict;
+  public static editors: IEditors;
+  public static manualAddedLines: [];
 
   public static async init(fsPath: string) {
-    StateManager.conflict = await initConflict(fsPath);
+    StateManager.gitConflict = await parseGitConflict(fsPath);
     StateManager.editors = await openEditors(fsPath);
+    StateManager.typedLines = [];
   }
 
   public static applyDecorations() {
     applyDecoration(
       StateManager.editors.localChanges,
-      StateManager.conflict.localChanges
+      StateManager.gitConflict.localChanges
     );
   }
 
