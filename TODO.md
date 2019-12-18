@@ -23,3 +23,13 @@ Nice to Haves:
 - custom line numbers and padding (create FR on github?) instead of simple adding new lines for aligning views
 - take my / theirs option for resolving conflict
 - jump / scroll to first conflict on open
+- investigate editor becomes not visible and visible again -> decorations need to be reapplied
+  ```js
+  vscode.window.onDidChangeVisibleTextEditors(visibleTextEditors => {
+    console.log('-----');
+    visibleTextEditors.forEach(editor => {
+      console.log(editor.document.uri.path);
+      // TextEditor is closed/disposed ? why? - This makes setting of decorations not possible
+    });
+  });
+  ```
