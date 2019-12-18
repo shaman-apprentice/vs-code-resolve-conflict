@@ -28,11 +28,11 @@ export function activate(context: vscode.ExtensionContext) {
       new MergeResultProvider()
     ),
 
-    vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
-      const scheme = e.document.uri.scheme;
+    vscode.workspace.onDidChangeTextDocument(event => {
+      const scheme = event.document.uri.scheme;
 
       if (scheme === MergeResultProvider.scheme) {
-        e.contentChanges.forEach(cC => {
+        event.contentChanges.forEach(cC => {
           // start := .line, .character
           console.log(cC.range.start, cC.range.end, cC.text);
         });
