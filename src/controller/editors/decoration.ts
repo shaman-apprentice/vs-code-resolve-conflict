@@ -18,14 +18,12 @@ export const calcDecoOpts = (localConflicts: ILocalConflict[]) =>
     (acc: any, lc, i) => {
       if (lc.removedLines.length) {
         const start = lc.startLineRemoved + acc.addedLines;
-        const end = start + lc.removedLines.length - 1;
-        acc.removed.push(getDecoOpts(start, end, i));
+        acc.removed.push(getDecoOpts(start, lc.removedLines, i));
       }
 
       if (lc.addedLines.length) {
         const start = lc.startLineAdded + lc.removedLines.length + acc.addedLines;
-        const end = start + lc.addedLines.length - 1;
-        acc.added.push(getDecoOpts(start, end, i));
+        acc.added.push(getDecoOpts(start, lc.addedLines, i));
       }
 
       acc.addedLines += lc.addedLines.length;
@@ -35,24 +33,28 @@ export const calcDecoOpts = (localConflicts: ILocalConflict[]) =>
   );
 
 const getDecoOpts = (
-  start: number,
-  end: number,
+  startLine: number,
+  lines: string[],
   conflictIndex: number
-): vscode.DecorationOptions => ({
-  range: new vscode.Range(
-    new vscode.Position(start, 0),
-    new vscode.Position(end, 0)
-  ),
-  hoverMessage: [
-    createHover({
-      shouldUse: true,
-      type: 'local',
-      conflictNumber: conflictIndex,
-    }),
-    createHover({
-      shouldUse: false,
-      type: 'local', // todo
-      conflictNumber: conflictIndex,
-    }),
-  ],
-});
+): vscode.DecorationOptions => {
+  const endLine = startLine + lines.length - 1;
+  const endChar = lines[lines.length - 1].length;
+  return {
+    range: new vscode.Range(
+      new vscode.Position(startLine, 0),
+      new vscode.Position(endLine, endChar)
+    ),
+    hoverMessage: [
+      createHover({
+        shouldUse: true,
+        type: 'local',
+        conflictNumber: conflictIndex,
+      }),
+      createHover({
+        shouldUse: false,
+        type: 'local', // todo
+        conflictNumber: conflictIndex,
+      }),
+    ],
+  };
+};
