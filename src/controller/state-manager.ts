@@ -1,6 +1,9 @@
 import { open as openEditors, close as closeEditors } from './editors/editors';
 import { parseGitConflict } from './git/parser';
-import { applyVersionDecoration } from './editors/decoration';
+import {
+  applyVersionDecoration,
+  applyMergeResultDecoration,
+} from './editors/decoration';
 import { IGitConflict } from '../model/git-conflict';
 import { IEditors } from '../model/editors';
 import { IMergeResultLine, IVersionLine } from '../model/line';
@@ -42,6 +45,10 @@ export class StateManager {
     applyVersionDecoration(
       StateManager.editors.localChanges,
       StateManager.parsedConflict.localChanges
+    );
+    applyMergeResultDecoration(
+      StateManager.editors.mergeResult,
+      StateManager.parsedConflict.mergeResult
     );
   }
 

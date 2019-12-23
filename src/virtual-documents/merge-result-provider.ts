@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import { StateManager } from '../controller/state-manager';
-import { getMergeResult } from '../controller/editors/content';
+import { getInitialMergeResult } from '../controller/content-parser/merge-result';
 
 export class MergeResultProvider implements vscode.FileSystemProvider {
   public static readonly scheme =
@@ -25,7 +25,7 @@ export class MergeResultProvider implements vscode.FileSystemProvider {
   }
 
   readFile(uri: vscode.Uri): Uint8Array {
-    const content = getMergeResult(
+    const content = getInitialMergeResult(
       StateManager.gitConflict.commonAncestor,
       StateManager.parsedConflict.manualAddedLines
     )

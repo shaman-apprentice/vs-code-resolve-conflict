@@ -1,4 +1,4 @@
-import { getLocalChanges, changes2Text } from './content';
+import { getLocalChanges } from './content';
 import { IMergeResultLine, IVersionLine } from '../../model/line';
 import { ISingleGitConflict } from '../../model/git-conflict';
 
@@ -39,18 +39,6 @@ describe('content parsing from git merge conflict', () => {
     );
 
     expect(parsedLocalChanges[1].paddingBottom).toBe(1);
-  });
-
-  it('adds empty lines for padding', () => {
-    const changes: IVersionLine[] = [
-      {
-        content: ['1'],
-        paddingBottom: 2,
-        wasAdded: false,
-      },
-    ];
-
-    expect(changes2Text(changes)).toBe('1\n\n');
   });
 });
 
