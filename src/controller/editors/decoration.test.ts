@@ -1,4 +1,4 @@
-import { calcDecoOpts } from './decoration';
+import { calcVersionDecoOpts } from './decoration';
 import { IVersionLine } from '../../model/line';
 
 describe('calculation of decorations', () => {
@@ -21,7 +21,7 @@ describe('calculation of decorations', () => {
       },
     ];
 
-    const decorations = calcDecoOpts(versionLines);
+    const decorations = calcVersionDecoOpts(versionLines);
 
     expect(decorations.length).toBe(1);
     expect(decorations[0].range.start.line).toBe(1);

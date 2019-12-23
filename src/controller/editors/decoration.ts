@@ -9,10 +9,10 @@ export const applyVersionDecoration = (
   editor: vscode.TextEditor,
   localConflicts: IVersionLine[]
 ) => {
-  editor.setDecorations(addedDecoration, calcDecoOpts(localConflicts));
+  editor.setDecorations(addedDecoration, calcVersionDecoOpts(localConflicts));
 };
 
-export const calcDecoOpts = (localConflicts: IVersionLine[]) =>
+export const calcVersionDecoOpts = (localConflicts: IVersionLine[]) =>
   localConflicts.reduce(
     (acc: any, lc, i) => {
       if (lc.wasAdded) {
