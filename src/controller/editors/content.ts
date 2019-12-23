@@ -8,8 +8,6 @@ Parse flow from IGitConflict:
 3. get remoteChanges lines: from merge Result and add needed padding-lines in all three
 */
 
-//TODO test first this before doing more
-
 /** returns localChanges and updates padding of mergeResultLines as side effect */
 export const getLocalChanges = (
   commonAncestor: string[],
@@ -35,7 +33,8 @@ export const getLocalChanges = (
       if (lc.addedLines.length < lc.removedLines.length) {
         addedLines.paddingBottom = lc.removedLines.length - lc.addedLines.length;
       } else if (lc.addedLines.length > lc.removedLines.length) {
-        // add padding to related mergeResultLine
+        mergeResult[lc.startRemoved + lc.removedLines.length - 1].paddingBottom =
+          lc.addedLines.length - lc.removedLines.length;
       }
 
       tmp.splice(lc.startRemoved, lc.removedLines.length);
