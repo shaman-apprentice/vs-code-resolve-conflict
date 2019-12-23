@@ -27,7 +27,7 @@ export class MergeResultProvider implements vscode.FileSystemProvider {
   readFile(uri: vscode.Uri): Uint8Array {
     const content = getMergeResult(
       StateManager.gitConflict.commonAncestor,
-      StateManager.manualAddedLines
+      StateManager.parsedConflict.manualAddedLines
     )
       .map(c => c.content)
       .join('\n');

@@ -1,27 +1,47 @@
 import { open as openEditors, close as closeEditors } from './editors/editors';
 import { parseGitConflict } from './git/parser';
-import { applyDecoration } from './editors/decoration';
+import { applyVersionDecoration } from './editors/decoration';
 import { IGitConflict } from '../model/git-conflict';
 import { IEditors } from '../model/editors';
-import { IMergeResultLine } from '../model/line';
+import { IMergeResultLine, IVersionLine } from '../model/line';
+import { getLocalChanges } from './editors/content';
 
 export class StateManager {
   public static gitConflict: IGitConflict;
   public static editors: IEditors;
-  public static manualAddedLines: [];
-  public static mergeResult: IMergeResultLine[];
+  public static parsedConflict: any; // todo
 
   public static async init(fsPath: string) {
     StateManager.gitConflict = await parseGitConflict(fsPath);
+    let mergeResult = StateManager.gitConflict.commonAncestor.map(
+      (line: string) => ({
+        content: [line],
+        paddingBottom: 0,
+        wasManualAdded: false,
+        wasRemoved: false,
+      })
+    );
+
+    let localChanges = getLocalChanges(
+      StateManager.gitConflict.commonAncestor,
+      StateManager.gitConflict.localChanges,
+      mergeResult
+    );
+
+    StateManager.parsedConflict = {
+      localChanges,
+      mergeResult,
+      remoteChanges: [] as IVersionLine[],
+      manualAddedLines: [],
+    };
+
     StateManager.editors = await openEditors(fsPath);
-    StateManager.manualAddedLines = [];
-    StateManager.mergeResult = [];
   }
 
   public static applyDecorations() {
-    applyDecoration(
+    applyVersionDecoration(
       StateManager.editors.localChanges,
-      StateManager.gitConflict.localChanges
+      StateManager.parsedConflict.localChanges
     );
   }
 

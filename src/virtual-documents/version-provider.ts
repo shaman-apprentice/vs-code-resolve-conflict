@@ -30,13 +30,7 @@ export class VersionProvider implements vscode.TextDocumentContentProvider {
   provideTextDocumentContent(uri: vscode.Uri) {
     switch (uri.query) {
       case VersionProvider.types.localChanges:
-        return changes2Text(
-          getLocalChanges(
-            StateManager.gitConflict.commonAncestor,
-            StateManager.gitConflict.localChanges,
-            StateManager.mergeResult
-          )
-        ); // todo hide internal call in module
+        return changes2Text(StateManager.parsedConflict.localChanges);
       case VersionProvider.types.remoteChanges:
         return getRemoteChanges(StateManager.gitConflict);
     }

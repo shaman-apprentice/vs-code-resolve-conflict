@@ -1,32 +1,31 @@
 import { calcDecoOpts } from './decoration';
+import { IVersionLine } from '../../model/line';
 
 describe('calculation of decorations', () => {
   it('calculates correct indexes for decorations', () => {
-    const conflicts = [
+    const versionLines: IVersionLine[] = [
       {
-        startRemoved: 2,
-        removedLines: ['snd line'],
-        startAdded: 2,
-        addedLines: ['thrd line'],
+        content: ['1'],
+        paddingBottom: 0,
+        wasAdded: false,
       },
       {
-        startRemoved: 4,
-        removedLines: ['5th line'],
-        startAdded: 4,
-        addedLines: ['fifth line'],
+        content: ['2', 'bla'],
+        paddingBottom: 1,
+        wasAdded: true,
+      },
+      {
+        content: ['4'],
+        paddingBottom: 0,
+        wasAdded: false,
       },
     ];
 
-    const decorations = calcDecoOpts(conflicts);
+    const decorations = calcDecoOpts(versionLines);
 
-    expect(decorations.removed[0].range.start.line).toBe(2);
-    expect(decorations.removed[0].range.end.line).toBe(2);
-    expect(decorations.added[0].range.start.line).toBe(3);
-    expect(decorations.added[0].range.end.line).toBe(3);
-
-    expect(decorations.removed[1].range.start.line).toBe(5);
-    expect(decorations.removed[1].range.end.line).toBe(5);
-    expect(decorations.added[1].range.start.line).toBe(6);
-    expect(decorations.added[1].range.end.line).toBe(6);
+    expect(decorations.length).toBe(1);
+    expect(decorations[0].range.start.line).toBe(1);
+    expect(decorations[0].range.end.line).toBe(2);
+    expect(decorations[0].range.end.character).toBe(3);
   });
 });

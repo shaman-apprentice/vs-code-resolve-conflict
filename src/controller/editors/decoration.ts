@@ -3,34 +3,28 @@ import { ISingleGitConflict } from '../../model/git-conflict';
 import { removed as removedDecoration } from '../../text-editor-decoration/removed';
 import { added as addedDecoration } from '../../text-editor-decoration/added';
 import { createHover } from '../../text-editor-decoration/hover';
+import { IVersionLine } from '../../model/line';
 
-export const applyDecoration = (
+export const applyVersionDecoration = (
   editor: vscode.TextEditor,
-  localConflicts: ISingleGitConflict[]
+  localConflicts: IVersionLine[]
 ) => {
-  const decorations = calcDecoOpts(localConflicts);
-  editor.setDecorations(addedDecoration, decorations.added);
-  editor.setDecorations(removedDecoration, decorations.removed);
+  editor.setDecorations(addedDecoration, calcDecoOpts(localConflicts));
 };
 
-export const calcDecoOpts = (localConflicts: ISingleGitConflict[]) =>
+export const calcDecoOpts = (localConflicts: IVersionLine[]) =>
   localConflicts.reduce(
     (acc: any, lc, i) => {
-      if (lc.removedLines.length) {
-        const start = lc.startRemoved + acc.addedLines;
-        acc.removed.push(getDecoOpts(start, lc.removedLines, i));
+      if (lc.wasAdded) {
+        acc.decos.push(getDecoOpts(acc.lineIndex, lc.content, acc.conflictIndex));
+        acc.conflictIndex += 1;
       }
 
-      if (lc.addedLines.length) {
-        const start = lc.startAdded + lc.removedLines.length + acc.addedLines;
-        acc.added.push(getDecoOpts(start, lc.addedLines, i));
-      }
-
-      acc.addedLines += lc.addedLines.length;
+      acc.lineIndex += lc.content.length + lc.paddingBottom;
       return acc;
     },
-    { removed: [], added: [], addedLines: 0 }
-  );
+    { decos: [], lineIndex: 0, conflictIndex: 0 }
+  ).decos;
 
 const getDecoOpts = (
   startLine: number,
