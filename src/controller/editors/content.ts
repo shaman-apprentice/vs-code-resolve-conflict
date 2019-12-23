@@ -44,6 +44,17 @@ export const getLocalChanges = (
     }, tmp);
 };
 
+export const changes2Text = (changes: IVersionLine[]): string =>
+  changes
+    .reduce((acc, line) => {
+      acc.push(...line.content);
+      if (line.paddingBottom) {
+        acc.push(...new Array(line.paddingBottom).fill(''));
+      }
+      return acc;
+    }, [] as string[])
+    .join('\n');
+
 export const getMergeResult = (
   commonAncestor: string[],
   manualAddedLines: [] // todo
