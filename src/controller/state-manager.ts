@@ -3,16 +3,19 @@ import { parseGitConflict } from './git/parser';
 import { applyDecoration } from './editors/decoration';
 import { IGitConflict } from '../model/git-conflict';
 import { IEditors } from '../model/editors';
+import { IMergeResultLine } from '../model/line';
 
 export class StateManager {
   public static gitConflict: IGitConflict;
   public static editors: IEditors;
   public static manualAddedLines: [];
+  public static mergeResult: IMergeResultLine[];
 
   public static async init(fsPath: string) {
     StateManager.gitConflict = await parseGitConflict(fsPath);
     StateManager.editors = await openEditors(fsPath);
-    StateManager.typedLines = [];
+    StateManager.manualAddedLines = [];
+    StateManager.mergeResult = [];
   }
 
   public static applyDecorations() {

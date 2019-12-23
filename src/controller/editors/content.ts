@@ -14,7 +14,7 @@ Parse flow from IGitConflict:
 export const getLocalChanges = (
   commonAncestor: string[],
   localChanges: ISingleGitConflict[],
-  mergeResultLines: IMergeResultLine[]
+  mergeResult: IMergeResultLine[]
 ): IVersionLine[] => {
   const tmp: IVersionLine[] = commonAncestor.slice().map(line => ({
     content: [line],
@@ -56,6 +56,6 @@ export const getMergeResult = (
     wasManualAdded: false, // // todo add via reduce manualAddedLines
   }));
 
-export const getRemoteChanges = (conflict: IGitConflict): string => {
+export const getRemoteChanges = (conflict: any): string => {
   return 'todo: static content so far';
 };
