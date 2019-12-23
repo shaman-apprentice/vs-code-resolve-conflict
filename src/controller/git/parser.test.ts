@@ -16,15 +16,15 @@ index 5d8d1fa..9356eeb 100644
 
     expect(parseDiff(gitDiff)).toEqual([
       {
-        startLineRemoved: 2,
+        startRemoved: 2,
         removedLines: ['snd line'],
-        startLineAdded: 2,
+        startAdded: 2,
         addedLines: ['thrd line'],
       },
       {
-        startLineRemoved: 4,
+        startRemoved: 4,
         removedLines: ['5th line'],
-        startLineAdded: 4,
+        startAdded: 4,
         addedLines: ['fifth line'],
       },
     ]);
@@ -43,9 +43,9 @@ index 5d8d1fa..bfaf4c0 100644
 
     expect(parseDiff(gitDiff)).toEqual([
       {
-        startLineRemoved: 2,
+        startRemoved: 2,
         removedLines: ['snd line'],
-        startLineAdded: 2,
+        startAdded: 2,
         addedLines: ['snd line', 'added a line'],
       },
     ]);
