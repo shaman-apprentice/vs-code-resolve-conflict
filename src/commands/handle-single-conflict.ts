@@ -9,24 +9,14 @@ export interface IHandleSingleConflictArgs {
 }
 
 export const handleSingleConflict = async (args: IHandleSingleConflictArgs) => {
-  const [resolvingConflict] = StateManager.gitConflict.localChanges.splice(
-    args.conflictNumber,
-    1
+  console.log(
+    'handling single conflict',
+    args.type,
+    args.shouldUse,
+    args.conflictNumber
   );
-
   if (args.type === 'local') {
     if (args.shouldUse) {
-      // remove related lines
-      StateManager.gitConflict.commonAncestor.splice(
-        resolvingConflict.startRemoved,
-        resolvingConflict.removedLines.length
-      );
-      // add related lines
-      StateManager.gitConflict.commonAncestor.splice(
-        resolvingConflict.startAdded,
-        0,
-        ...resolvingConflict.addedLines
-      );
     }
     // todo other cases
   }

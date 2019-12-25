@@ -1,20 +1,13 @@
 import { ISingleGitConflict } from '../../model/git-conflict';
 import { IMergeResultLine, IVersionLine } from '../../model/line';
 
-/* 
-Parse flow from IGitConflict:
-1. get mergeResult lines: from common ancestor
-2. get localChange lines: from mergeResult and add needed padding-lines in both
-3. get remoteChanges lines: from merge Result and add needed padding-lines in all three
-*/
-
 /** returns localChanges and updates padding of mergeResultLines as side effect */
-export const getLocalChanges = (
+export const parseLocalChanges = (
   commonAncestor: string[],
   localChanges: ISingleGitConflict[],
   mergeResult: IMergeResultLine[]
 ): IVersionLine[] => {
-  const tmp: IVersionLine[] = commonAncestor.slice().map(line => ({
+  const tmpLocalChanges: IVersionLine[] = commonAncestor.slice().map(line => ({
     content: [line],
     paddingBottom: 0,
     wasAdded: false,
@@ -37,13 +30,21 @@ export const getLocalChanges = (
           lc.addedLines.length - lc.removedLines.length;
       }
 
-      tmp.splice(lc.startRemoved, lc.removedLines.length);
-      tmp.splice(lc.startAdded, 0, addedLines);
+      tmpLocalChanges.splice(lc.startRemoved, lc.removedLines.length);
+      tmpLocalChanges.splice(lc.startAdded, 0, addedLines);
+
+      markRemovedLines(mergeResult, lc);
 
       return acc;
-    }, tmp);
+    }, tmpLocalChanges);
 };
 
-export const getRemoteChanges = (conflict: any): string => {
-  return 'todo: static content so far';
+const markRemovedLines = (
+  mergeResult: IMergeResultLine[],
+  lc: ISingleGitConflict
+) => {
+  let index = lc.startAdded;
+  const lastIndex = lc.startAdded + lc.removedLines.length - 1;
+
+  for (index; index <= lastIndex; index++) mergeResult[index].wasRemoved = true;
 };

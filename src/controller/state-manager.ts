@@ -4,40 +4,16 @@ import {
   applyVersionDecoration,
   applyMergeResultDecoration,
 } from './editors/decoration';
-import { IGitConflict } from '../model/git-conflict';
 import { IEditors } from '../model/editors';
-import { IMergeResultLine, IVersionLine } from '../model/line';
-import { getLocalChanges } from './editors/content';
+import { parseInitialConflict } from './content-parser/content-parser';
 
 export class StateManager {
-  public static gitConflict: IGitConflict;
-  public static editors: IEditors;
   public static parsedConflict: any; // todo
+  public static editors: IEditors;
 
   public static async init(fsPath: string) {
-    StateManager.gitConflict = await parseGitConflict(fsPath);
-    let mergeResult = StateManager.gitConflict.commonAncestor.map(
-      (line: string) => ({
-        content: [line],
-        paddingBottom: 0,
-        wasManualAdded: false,
-        wasRemoved: false,
-      })
-    );
-
-    let localChanges = getLocalChanges(
-      StateManager.gitConflict.commonAncestor,
-      StateManager.gitConflict.localChanges,
-      mergeResult
-    );
-
-    StateManager.parsedConflict = {
-      localChanges,
-      mergeResult,
-      remoteChanges: [] as IVersionLine[],
-      manualAddedLines: [],
-    };
-
+    const gitConflict = await parseGitConflict(fsPath);
+    StateManager.parsedConflict = parseInitialConflict(gitConflict);
     StateManager.editors = await openEditors(fsPath);
   }
 

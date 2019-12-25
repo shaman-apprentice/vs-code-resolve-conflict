@@ -1,4 +1,4 @@
-import { IVersionLine } from '../../model/line';
+import { IVersionLine, IMergeResultLine } from '../../model/line';
 
 export const changesToText = (changes: IVersionLine[]): string =>
   changes
@@ -10,3 +10,6 @@ export const changesToText = (changes: IVersionLine[]): string =>
       return acc;
     }, [] as string[])
     .join('\n');
+
+export const mergeResultToText = (lines: IMergeResultLine[]) =>
+  lines.map(c => c.content).join('\n');
