@@ -32,7 +32,7 @@ export class VersionProvider implements vscode.TextDocumentContentProvider {
       case VersionProvider.types.localChanges:
         return changesToText(StateManager.parsedConflict.localChanges);
       case VersionProvider.types.remoteChanges:
-        return 'TODO';
+        return changesToText(StateManager.parsedConflict.remoteChanges);
     }
   }
 }

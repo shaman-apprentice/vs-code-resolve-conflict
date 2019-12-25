@@ -1,8 +1,7 @@
 import { parseLocalChanges } from './local-changes-parser';
 import { ISingleGitConflict } from '../../model/git-conflict';
-import { mergeResultToText } from './to-text';
 
-describe('content parsing from git merge conflict', () => {
+describe('parse local changes from git merge conflict', () => {
   it('calcs needed padding to mergeResult', () => {
     const commonAncestor = ['0', '1', '2'];
     const mergeResult = commonAncestor.map(getInitialMergeResultLine);

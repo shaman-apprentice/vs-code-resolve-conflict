@@ -1,6 +1,6 @@
 import { IGitConflict } from '../../model/git-conflict';
 import { parseLocalChanges } from './local-changes-parser';
-import { IVersionLine } from '../../model/line';
+import { parseRemoteChanges } from './remote-changes-parser';
 
 /**
  * Parse flow from IGitConflict:
@@ -22,10 +22,17 @@ export const parseInitialConflict = (gitConflict: IGitConflict) => {
     tmpMergeResult
   );
 
+  const remoteChanges = parseRemoteChanges(
+    gitConflict.commonAncestor,
+    gitConflict.remoteChanges,
+    tmpMergeResult,
+    tmpLocalChanges
+  );
+
   return {
     localChanges: tmpLocalChanges,
     mergeResult: tmpMergeResult,
-    remoteChanges: [],
+    remoteChanges,
     manualAddedLines: [],
   };
 };

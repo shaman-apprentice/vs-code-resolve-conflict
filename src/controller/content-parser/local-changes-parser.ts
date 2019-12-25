@@ -1,50 +1,34 @@
 import { ISingleGitConflict } from '../../model/git-conflict';
 import { IMergeResultLine, IVersionLine } from '../../model/line';
+import { markRemovedLines, initTmpChanges } from './utilities';
 
-/** returns localChanges and updates padding of mergeResultLines as side effect */
+/** returns localChanges and updates padding of parsedMergeResultLines as side effect */
 export const parseLocalChanges = (
   commonAncestor: string[],
-  localChanges: ISingleGitConflict[],
-  mergeResult: IMergeResultLine[]
+  localConflict: ISingleGitConflict[],
+  parsedMergeResult: IMergeResultLine[]
 ): IVersionLine[] => {
-  const tmpLocalChanges: IVersionLine[] = commonAncestor.slice().map(line => ({
-    content: [line],
-    paddingBottom: 0,
-    wasAdded: false,
-  }));
+  const tmpLocalChanges: IVersionLine[] = initTmpChanges(commonAncestor);
 
-  return localChanges
-    .slice()
-    .reverse() // calculation of padding is easier when doing from the end
-    .reduce((acc, lc) => {
-      const addedLines = {
-        content: lc.addedLines,
-        paddingBottom: 0,
-        wasAdded: true,
-      };
+  return localConflict.reduce((acc, lc) => {
+    const addedLines = {
+      content: lc.addedLines,
+      paddingBottom: 0,
+      wasAdded: true,
+    };
 
-      if (lc.addedLines.length < lc.removedLines.length) {
-        addedLines.paddingBottom = lc.removedLines.length - lc.addedLines.length;
-      } else if (lc.addedLines.length > lc.removedLines.length) {
-        mergeResult[lc.startRemoved + lc.removedLines.length - 1].paddingBottom =
-          lc.addedLines.length - lc.removedLines.length;
-      }
+    if (lc.addedLines.length < lc.removedLines.length) {
+      addedLines.paddingBottom = lc.removedLines.length - lc.addedLines.length;
+    } else if (lc.addedLines.length > lc.removedLines.length) {
+      parsedMergeResult[lc.startRemoved + lc.removedLines.length - 1].paddingBottom =
+        lc.addedLines.length - lc.removedLines.length;
+    }
 
-      tmpLocalChanges.splice(lc.startRemoved, lc.removedLines.length);
-      tmpLocalChanges.splice(lc.startAdded, 0, addedLines);
+    tmpLocalChanges.splice(lc.startRemoved, lc.removedLines.length);
+    tmpLocalChanges.splice(lc.startAdded, 0, addedLines);
 
-      markRemovedLines(mergeResult, lc);
+    markRemovedLines(parsedMergeResult, lc);
 
-      return acc;
-    }, tmpLocalChanges);
-};
-
-const markRemovedLines = (
-  mergeResult: IMergeResultLine[],
-  lc: ISingleGitConflict
-) => {
-  let index = lc.startAdded;
-  const lastIndex = lc.startAdded + lc.removedLines.length - 1;
-
-  for (index; index <= lastIndex; index++) mergeResult[index].wasRemoved = true;
+    return acc;
+  }, tmpLocalChanges);
 };

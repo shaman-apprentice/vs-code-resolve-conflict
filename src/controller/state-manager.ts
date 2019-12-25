@@ -27,6 +27,10 @@ export class StateManager {
       StateManager.editors.mergeResult,
       StateManager.parsedConflict.mergeResult
     );
+    applyVersionDecoration(
+      StateManager.editors.remoteChanges,
+      StateManager.parsedConflict.remoteChanges
+    );
   }
 
   public static async save() {
