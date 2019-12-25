@@ -23,10 +23,9 @@ export const parseInitialConflict = (gitConflict: IGitConflict) => {
   );
 
   return {
-    commonAncestor: gitConflict.commonAncestor,
     localChanges: tmpLocalChanges,
     mergeResult: tmpMergeResult,
-    remoteChanges: [] as IVersionLine[],
+    remoteChanges: [],
     manualAddedLines: [],
   };
 };

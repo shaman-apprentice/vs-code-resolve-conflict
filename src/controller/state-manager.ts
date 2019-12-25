@@ -6,9 +6,10 @@ import {
 } from './editors/decoration';
 import { IEditors } from '../model/editors';
 import { parseInitialConflict } from './content-parser/content-parser';
+import { IParsedConflict } from '../model/parsed-conflict';
 
 export class StateManager {
-  public static parsedConflict: any; // todo
+  public static parsedConflict: IParsedConflict;
   public static editors: IEditors;
 
   public static async init(fsPath: string) {
