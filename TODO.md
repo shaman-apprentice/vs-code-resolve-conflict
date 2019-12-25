@@ -23,6 +23,7 @@ Nice to Haves:
 - sync scrolling
 - consider user settings of '\n' (parsing from git, writing to vs code text document)
 - custom line numbers and padding (create FR on github?) instead of simple adding new lines for aligning views
+  - add grey decoration for padding-lines
 - take my / theirs option for resolving conflict
 - jump / scroll to first conflict on open
 - investigate editor becomes not visible and visible again -> decorations need to be reapplied
