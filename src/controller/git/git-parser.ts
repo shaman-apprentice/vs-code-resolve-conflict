@@ -1,7 +1,7 @@
 import { getCommonAncestorContent, getConflictObjectIds, getDiff } from './git-cmds';
-import { IGitConflict, ISingleGitConflict } from '../../model/git-conflict';
+import { IGitChanges, ISingleGitChange } from '../../model/git-conflict';
 
-export const parseGitConflict = async (fsPath: string): Promise<IGitConflict> => {
+export const parseGitConflict = async (fsPath: string): Promise<IGitChanges> => {
   const [ancestorId, localId, remoteId] = await getConflictObjectIds(fsPath);
 
   return {
@@ -11,7 +11,7 @@ export const parseGitConflict = async (fsPath: string): Promise<IGitConflict> =>
   };
 };
 
-export const parseDiff = (diff: string): ISingleGitConflict[] =>
+export const parseDiff = (diff: string): ISingleGitChange[] =>
   diff
     .split('\n')
     .slice(4) // throw away fst 4 rows / meta data
@@ -32,7 +32,7 @@ export const parseDiff = (diff: string): ISingleGitConflict[] =>
       if (line.startsWith('+')) current.addedLines.push(line.slice(1));
 
       return acc;
-    }, [] as ISingleGitConflict[]);
+    }, [] as ISingleGitChange[]);
 
 const startLineRemovedRegEx = /-([0-9]*)/;
 const startLineAddedRegEx = /\+([0-9]*)/;

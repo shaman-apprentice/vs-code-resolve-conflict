@@ -1,5 +1,5 @@
 import { open as openEditors, close as closeEditors } from './editors/editors';
-import { parseGitConflict } from './git/parser';
+import { parseGitConflict } from './git/git-parser';
 import {
   applyVersionDecoration,
   applyMergeResultDecoration,

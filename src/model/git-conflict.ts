@@ -1,10 +1,10 @@
-export interface IGitConflict {
-  localChanges: ISingleGitConflict[];
+export interface IGitChanges {
+  localChanges: ISingleGitChange[];
   commonAncestor: string[];
-  remoteChanges: ISingleGitConflict[];
+  remoteChanges: ISingleGitChange[];
 }
 
-export interface ISingleGitConflict {
+export interface ISingleGitChange {
   startRemoved: number;
   removedLines: string[];
   startAdded: number;
