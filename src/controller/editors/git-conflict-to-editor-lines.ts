@@ -1,4 +1,4 @@
-import { IMergeResultLine, IChangesLine } from '../../model/editors';
+import { IMergeResultLine, IChangesLine } from '../../model/line';
 import { ISingleGitChange } from '../../model/git-conflict';
 
 export const parseInitialMergeResult = (
