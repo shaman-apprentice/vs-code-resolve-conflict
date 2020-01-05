@@ -12,26 +12,23 @@ interface IGitChangesEditor {
   addedDecorations: vscode.DecorationOptions[];
 }
 
-export interface IChangesLine {
-  content: string;
-  wasAdded: boolean;
-}
-
 interface IMergeResultEditor {
   editor: vscode.TextEditor;
   lines: IMergeResultLine[];
   removedDecorations: vscode.DecorationOptions[];
 }
 
-export interface IMergeResultLine {
-  content: string;
-  isLocalLine: boolean;
-  isRemoteLine: boolean;
-  extraLine?: ExtraLineType;
-  wasRemoved?: boolean;
+export interface IMergeResultLine extends ILine {
+  wasManualAdded?: boolean;
+  wasRemovedLocal?: boolean;
+  wasRemovedRemote?: boolean;
 }
 
-export enum ExtraLineType {
-  padding,
-  manualTyped,
+export interface IChangesLine extends ILine {
+  wasAdded?: boolean;
+}
+
+interface ILine {
+  content: string;
+  isAlignmentPadding?: boolean;
 }
