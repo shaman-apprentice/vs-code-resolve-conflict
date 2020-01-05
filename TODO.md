@@ -14,7 +14,6 @@ MVP:
 
 Nice to Haves:
 
-- deco for "padding" lines
 - str+z support
 - make color (including icon svg) customizable
 - integration tests with a git-repo which has merge conflicts
@@ -24,6 +23,7 @@ Nice to Haves:
 - consider user settings of '\n' (parsing from git, writing to vs code text document)
 - custom line numbers and padding (create FR on github?) instead of simple adding new lines for aligning views
   - add grey decoration for padding-lines
+  - padding possible through empty deco text lines?
 - take my / theirs option for resolving conflict
 - jump / scroll to first conflict on open
 - investigate editor becomes not visible and visible again -> decorations need to be reapplied
