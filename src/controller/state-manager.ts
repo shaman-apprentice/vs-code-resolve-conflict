@@ -63,12 +63,14 @@ export class StateManager {
   }
 
   public static applyDecorations() {
-    console.log(StateManager.data.localChanges.addedDecorations);
     StateManager.editors.localChanges.setDecorations(
       addedDecoration,
       StateManager.data.localChanges.addedDecorations
     );
-    // todo other
+    StateManager.editors.remoteChanges.setDecorations(
+      addedDecoration,
+      StateManager.data.remoteChanges.addedDecorations
+    );
   }
 
   public static async save() {

@@ -24,9 +24,9 @@ export const getAddedDecorations = (
 
     const startLine = lineIndex;
     while (lineIndex < lines.length && lines[lineIndex].wasAdded) lineIndex++;
-    const endLine = startLine + (lineIndex - startLine);
-    const endChar = lines[endLine].content.length - 1;
-    if (conflicts[conflictIndex].isResolved)
+    const endLine = startLine + lineIndex - startLine - 1;
+    const endChar = lines[endLine].content.length;
+    if (!conflicts[conflictIndex].isResolved)
       addedDecorations.push(
         getAddedDecoration(type, startLine, endLine, endChar, conflictIndex)
       );
