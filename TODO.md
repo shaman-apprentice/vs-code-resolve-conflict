@@ -17,6 +17,7 @@ Nice to Haves:
 - str+z support
 - make color (including icon svg) customizable
 - integration tests with a git-repo which has merge conflicts
+  - git submodules vs git subtree?
 - minify code as pre-publish
 - show next conflict (in overview lane as well)
 - sync scrolling
