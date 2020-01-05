@@ -37,7 +37,7 @@ export const getAddedDecorations = (
   return addedDecorations;
 };
 
-export const getAddedDecoration = (
+const getAddedDecoration = (
   type: VersionType,
   startLine: number,
   endLine: number,
