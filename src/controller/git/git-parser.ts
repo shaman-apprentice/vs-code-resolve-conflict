@@ -6,7 +6,7 @@ export const parseGitConflict = async (fsPath: string): Promise<IGitChanges> => 
 
   return {
     localChanges: parseDiff(await getDiff(fsPath, ancestorId, localId)),
-    commonAncestor: (await getCommonAncestorContent(fsPath)).split('\n'),
+    commonAncestor: await getCommonAncestorContent(fsPath),
     remoteChanges: parseDiff(await getDiff(fsPath, ancestorId, remoteId)),
   };
 };

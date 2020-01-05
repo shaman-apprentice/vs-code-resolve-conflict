@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import { StateManager } from '../controller/state-manager';
-import { mergeResultToText } from '../controller/content-parser/to-text';
+import { linesToText } from '../controller/editors/editors-utilities';
 
 export class MergeResultProvider implements vscode.FileSystemProvider {
   public static readonly scheme =
@@ -25,7 +25,7 @@ export class MergeResultProvider implements vscode.FileSystemProvider {
   }
 
   readFile(uri: vscode.Uri): Uint8Array {
-    const text = mergeResultToText(StateManager.parsedConflict.mergeResult);
+    const text = linesToText(StateManager.data.mergeResult.lines);
     return new TextEncoder().encode(text);
   }
 

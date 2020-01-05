@@ -8,7 +8,7 @@ export interface IChangesLine extends ILine {
   wasAdded?: boolean;
 }
 
-interface ILine {
+export interface ILine {
   content: string;
   isAlignmentPadding?: boolean;
 }

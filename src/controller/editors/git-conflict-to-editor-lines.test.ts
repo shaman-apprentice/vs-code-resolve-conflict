@@ -6,7 +6,7 @@ import {
 
 describe('`parseLocalChanges`', () => {
   it('parses the correct text content of lines', () => {
-    const commonAncestor = ['1', '2', '3'];
+    const commonAncestor = ['1', '2', '3'].join('\n');
     const changes = [
       {
         startRemoved: 1,
@@ -15,7 +15,7 @@ describe('`parseLocalChanges`', () => {
         addedLines: ['two'],
       },
     ];
-    const mergeResult = parseInitialMergeResult(commonAncestor.join('\n'));
+    const mergeResult = parseInitialMergeResult(commonAncestor);
 
     const lines = parseLocalChanges(changes, commonAncestor, mergeResult);
     expect(lines.length).toBe(3);
@@ -25,7 +25,7 @@ describe('`parseLocalChanges`', () => {
   });
 
   it('marks lines as removed', () => {
-    const commonAncestor = ['1', '2', '3'];
+    const commonAncestor = ['1', '2', '3'].join('\n');
     const changes = [
       {
         startRemoved: 1,
@@ -34,7 +34,7 @@ describe('`parseLocalChanges`', () => {
         addedLines: ['2', '2.5'],
       },
     ];
-    const mergeResult = parseInitialMergeResult(commonAncestor.join('\n'));
+    const mergeResult = parseInitialMergeResult(commonAncestor);
 
     parseLocalChanges(changes, commonAncestor, mergeResult);
 
@@ -44,7 +44,7 @@ describe('`parseLocalChanges`', () => {
   });
 
   it('handles alignment of lines with MORE added than removed lines', () => {
-    const commonAncestor = ['1', '2', '3'];
+    const commonAncestor = ['1', '2', '3'].join('\n');
     const changes = [
       {
         startRemoved: 1,
@@ -53,7 +53,7 @@ describe('`parseLocalChanges`', () => {
         addedLines: ['2', '2.5'],
       },
     ];
-    const mergeResult = parseInitialMergeResult(commonAncestor.join('\n'));
+    const mergeResult = parseInitialMergeResult(commonAncestor);
 
     parseLocalChanges(changes, commonAncestor, mergeResult);
 
@@ -62,7 +62,7 @@ describe('`parseLocalChanges`', () => {
   });
 
   it('handles alignment of lines with LESS added than removed lines', () => {
-    const commonAncestor = ['1', '2', '3'];
+    const commonAncestor = ['1', '2', '3'].join('\n');
     const changes = [
       {
         startRemoved: 1,
@@ -71,7 +71,7 @@ describe('`parseLocalChanges`', () => {
         addedLines: ['2 and 3'],
       },
     ];
-    const mergeResult = parseInitialMergeResult(commonAncestor.join('\n'));
+    const mergeResult = parseInitialMergeResult(commonAncestor);
 
     const lines = parseLocalChanges(changes, commonAncestor, mergeResult);
 
@@ -80,7 +80,7 @@ describe('`parseLocalChanges`', () => {
   });
 
   it('adjusts lines correctly when having multiple changes with MORE added than removed', () => {
-    const commonAncestor = ['1', '2', '3', '4'];
+    const commonAncestor = ['1', '2', '3', '4'].join('\n');
     const changes = [
       {
         startRemoved: 1,
@@ -95,7 +95,7 @@ describe('`parseLocalChanges`', () => {
         addedLines: ['4', '4.5'],
       },
     ];
-    const mergeResult = parseInitialMergeResult(commonAncestor.join('\n'));
+    const mergeResult = parseInitialMergeResult(commonAncestor);
 
     parseLocalChanges(changes, commonAncestor, mergeResult);
     expect(mergeResult.length).toBe(6);
@@ -104,7 +104,7 @@ describe('`parseLocalChanges`', () => {
   });
 
   it('adjusts lines correctly when having multiple changes with LESS added than removed', () => {
-    const commonAncestor = ['1', '2', '3', '4'];
+    const commonAncestor = ['1', '2', '3', '4'].join('\n');
     const changes = [
       {
         startRemoved: 0,
@@ -119,7 +119,7 @@ describe('`parseLocalChanges`', () => {
         addedLines: ['3 and 4'],
       },
     ];
-    const mergeResult = parseInitialMergeResult(commonAncestor.join('\n'));
+    const mergeResult = parseInitialMergeResult(commonAncestor);
 
     const localLines = parseLocalChanges(changes, commonAncestor, mergeResult);
     expect(localLines.length).toBe(4);
@@ -130,7 +130,7 @@ describe('`parseLocalChanges`', () => {
 
 describe('`parseRemoteChanges`', () => {
   it('adds remaining padding from merge result', () => {
-    const commonAncestor = ['1', '2', '3'];
+    const commonAncestor = ['1', '2', '3'].join('\n');
     const localChanges = [
       {
         startRemoved: 1,
@@ -139,7 +139,7 @@ describe('`parseRemoteChanges`', () => {
         addedLines: ['2', '2.5'],
       },
     ];
-    const mergeResult = parseInitialMergeResult(commonAncestor.join('\n'));
+    const mergeResult = parseInitialMergeResult(commonAncestor);
     const localLines = parseLocalChanges(localChanges, commonAncestor, mergeResult);
     const remoteLines = parseRemoteChanges(
       [],
@@ -155,7 +155,7 @@ describe('`parseRemoteChanges`', () => {
   });
 
   it('takes padding inserted by local changes into account', () => {
-    const commonAncestor = ['1', '2', '3'];
+    const commonAncestor = ['1', '2', '3'].join('\n');
     const localChanges = [
       {
         startRemoved: 0,
@@ -172,7 +172,7 @@ describe('`parseRemoteChanges`', () => {
         addedLines: ['two'],
       },
     ];
-    const mergeResult = parseInitialMergeResult(commonAncestor.join('\n'));
+    const mergeResult = parseInitialMergeResult(commonAncestor);
     const localLines = parseLocalChanges(localChanges, commonAncestor, mergeResult);
     const remoteLines = parseRemoteChanges(
       remoteChanges,
@@ -188,7 +188,7 @@ describe('`parseRemoteChanges`', () => {
   });
 
   it('updates merge result and local padding', () => {
-    const commonAncestor = ['1', '2'];
+    const commonAncestor = ['1', '2'].join('\n');
     const localChanges = [
       {
         startRemoved: 0,
@@ -205,7 +205,7 @@ describe('`parseRemoteChanges`', () => {
         addedLines: ['1.0', '1.5'],
       },
     ];
-    const mergeResult = parseInitialMergeResult(commonAncestor.join('\n'));
+    const mergeResult = parseInitialMergeResult(commonAncestor);
     const localLines = parseLocalChanges(localChanges, commonAncestor, mergeResult);
     const remoteLines = parseRemoteChanges(
       remoteChanges,

@@ -1,43 +1,72 @@
 import * as vscode from 'vscode';
 
-import { IHandleSingleConflictArgs } from '../../commands/handle-single-conflict';
+import {
+  IHandleSingleConflictArgs,
+  VersionType,
+  ISingleGitChange,
+} from '../../model/git-conflict';
+import { IChangesLine } from '../../model/line';
+
+export const getAddedDecorations = (
+  type: VersionType,
+  lines: IChangesLine[],
+  conflicts: ISingleGitChange[]
+) => {
+  let conflictIndex = 0;
+  let lineIndex = 0;
+  const addedDecorations = [] as vscode.DecorationOptions[];
+
+  while (lineIndex < lines.length) {
+    if (!lines[lineIndex].wasAdded) {
+      lineIndex++;
+      continue;
+    }
+
+    const startLine = lineIndex;
+    while (lineIndex < lines.length && lines[lineIndex].wasAdded) lineIndex++;
+    const endLine = startLine + (lineIndex - startLine);
+    const endChar = lines[endLine].content.length - 1;
+    if (conflicts[conflictIndex].isResolved)
+      addedDecorations.push(
+        getAddedDecoration(type, startLine, endLine, endChar, conflictIndex)
+      );
+
+    conflictIndex += 1;
+  }
+
+  return addedDecorations;
+};
 
 export const getAddedDecoration = (
+  type: VersionType,
   startLine: number,
-  lines: string[],
+  endLine: number,
+  endChar: number,
   conflictIndex: number
 ): vscode.DecorationOptions => {
-  const endLine = startLine + lines.length - 1;
-  const endChar = lines[lines.length - 1].length;
+  const hoverOpts = {
+    type,
+    conflictIndex,
+    startLine,
+    endLine,
+  };
   return {
     range: new vscode.Range(
       new vscode.Position(startLine, 0),
       new vscode.Position(endLine, endChar)
     ),
     hoverMessage: [
-      createHover({
-        shouldUse: true,
-        type: 'local',
-        conflictNumber: conflictIndex,
-      }),
-      createHover({
-        shouldUse: false,
-        type: 'local', // todo
-        conflictNumber: conflictIndex,
-      }),
+      createHover({ ...hoverOpts, shouldUse: true }),
+      createHover({ ...hoverOpts, shouldUse: false }),
     ],
   };
 };
 
 export const createHover = (args: IHandleSingleConflictArgs) => {
   const description = args.shouldUse ? 'use' : "don't use";
-  const cmd = getCmd(args);
+  const encodedArgs = encodeURIComponent(JSON.stringify(args));
+  const cmd = vscode.Uri.parse(`command:handle-single-conflict?${encodedArgs}`);
   const hover = new vscode.MarkdownString(`[${description}](${cmd})`);
   hover.isTrusted = true;
   return hover;
-};
-
-const getCmd = (args: IHandleSingleConflictArgs) => {
-  const encodedArgs = encodeURIComponent(JSON.stringify(args));
-  return vscode.Uri.parse(`command:handle-single-conflict?${encodedArgs}`);
 };

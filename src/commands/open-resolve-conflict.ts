@@ -2,19 +2,17 @@ import * as vscode from 'vscode';
 
 import { StateManager } from '../controller/state-manager';
 
-export const openResolveConflict = async (ctx: any) => {
+export const openResolveConflict = (ctx: any) => {
   const fsPath = getFsPath(ctx);
   if (!fsPath) return;
 
-  await StateManager.init(fsPath);
-  StateManager.applyDecorations();
+  return StateManager.init(fsPath);
 };
 
 const getFsPath = (ctx?: any) => {
   if (ctx) return ctx.resourceUri.fsPath;
 
   if (vscode.window.activeTextEditor)
-    // todo check if it has conflicts somewhere - else skip
     return vscode.window.activeTextEditor.document.fileName;
 
   return null;

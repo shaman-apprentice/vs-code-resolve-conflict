@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import { StateManager } from '../controller/state-manager';
-import { changesToText } from '../controller/content-parser/to-text';
+import { linesToText } from '../controller/editors/editors-utilities';
 
 export class VersionProvider implements vscode.TextDocumentContentProvider {
   public static readonly scheme =
@@ -30,9 +30,9 @@ export class VersionProvider implements vscode.TextDocumentContentProvider {
   provideTextDocumentContent(uri: vscode.Uri) {
     switch (uri.query) {
       case VersionProvider.types.localChanges:
-        return changesToText(StateManager.parsedConflict.localChanges);
+        return linesToText(StateManager.data.localChanges.lines);
       case VersionProvider.types.remoteChanges:
-        return changesToText(StateManager.parsedConflict.remoteChanges);
+        return linesToText(StateManager.data.remoteChanges.lines);
     }
   }
 }

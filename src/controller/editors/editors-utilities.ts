@@ -3,6 +3,7 @@ import * as path from 'path';
 
 import { VersionProvider } from '../../virtual-documents/version-provider';
 import { MergeResultProvider } from '../../virtual-documents/merge-result-provider';
+import { ILine } from '../../model/line';
 
 export const open = async (fsPath: string) => {
   const { name, ext } = path.parse(fsPath);
@@ -42,3 +43,5 @@ const openRemoteChanges = async (name: string, ext: string) => {
     viewColumn: vscode.ViewColumn.Beside,
   });
 };
+
+export const linesToText = (lines: ILine[]) => lines.map(l => l.content).join('\n');

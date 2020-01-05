@@ -10,7 +10,7 @@ export const parseInitialMergeResult = (
 
 export const parseLocalChanges = (
   changes: ISingleGitChange[],
-  commonAncestor: string[],
+  commonAncestor: string,
   mergeResult: IMergeResultLine[]
 ): IChangesLine[] => {
   let offset = 0; // offset to common ancestor due to more added than remove lines
@@ -37,7 +37,7 @@ export const parseLocalChanges = (
 
 export const parseRemoteChanges = (
   changes: ISingleGitChange[],
-  commonAncestor: string[],
+  commonAncestor: string,
   mergeResult: IMergeResultLine[],
   localLines: IChangesLine[]
 ): IChangesLine[] => {
@@ -112,8 +112,8 @@ const getPaddingLines = (count: number) =>
     isAlignmentPadding: true,
   }));
 
-const getInitialVersionLines = (commonAncestor: string[]): IChangesLine[] =>
-  commonAncestor.map(line => ({
+const getInitialVersionLines = (commonAncestor: string): IChangesLine[] =>
+  commonAncestor.split('\n').map(line => ({
     content: line,
     wasAdded: false,
   })) as IChangesLine[];
