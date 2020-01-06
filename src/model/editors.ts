@@ -18,10 +18,8 @@ export interface IData {
 export interface IEditorVersionData {
   lines: IChangesLine[];
   conflicts: ISingleGitChange[];
-  addedDecorations: vscode.DecorationOptions[];
 }
 
 export interface IEditorMergeResultData {
   lines: IMergeResultLine[];
-  removedDecorations: vscode.DecorationOptions[];
 }

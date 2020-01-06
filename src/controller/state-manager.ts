@@ -40,24 +40,13 @@ export class StateManager {
       localChanges: {
         lines: localChangesLines,
         conflicts: gitConflict.localChanges,
-        addedDecorations: getAddedDecorations(
-          VersionType.local,
-          localChangesLines,
-          gitConflict.localChanges
-        ),
       },
       mergeResult: {
         lines: mergeResultLines,
-        removedDecorations: getRemovedDecorations(mergeResultLines),
       },
       remoteChanges: {
         lines: remoteChangesLines,
         conflicts: gitConflict.remoteChanges,
-        addedDecorations: getAddedDecorations(
-          VersionType.remote,
-          remoteChangesLines,
-          gitConflict.remoteChanges
-        ),
       },
     };
 
@@ -69,15 +58,23 @@ export class StateManager {
   public static applyDecorations() {
     StateManager.editors.localChanges.setDecorations(
       addedDecoration,
-      StateManager.data.localChanges.addedDecorations
+      getAddedDecorations(
+        VersionType.local,
+        StateManager.data.localChanges.lines,
+        StateManager.data.localChanges.conflicts
+      )
     );
     StateManager.editors.mergeResult.setDecorations(
       removedDecoration,
-      StateManager.data.mergeResult.removedDecorations
+      getRemovedDecorations(StateManager.data.mergeResult.lines)
     );
     StateManager.editors.remoteChanges.setDecorations(
       addedDecoration,
-      StateManager.data.remoteChanges.addedDecorations
+      getAddedDecorations(
+        VersionType.remote,
+        StateManager.data.remoteChanges.lines,
+        StateManager.data.remoteChanges.conflicts
+      )
     );
   }
 
