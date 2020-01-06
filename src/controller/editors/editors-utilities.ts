@@ -54,17 +54,21 @@ export const updateMergeResult = (
   const startChar = event.range.start.character;
   const endLine = event.range.end.line;
   const endChar = event.range.end.character;
-  if (endLine - startLine === 0) {
-    lines[startLine].content = replaceSubStr(
-      lines[startLine].content,
-      startChar,
-      endChar,
-      event.text
-    );
-    return;
-  }
-
   const newLines = event.text.split('\n');
+
+  lines[startLine].content = replaceSubStr(
+    lines[startLine].content,
+    startChar,
+    endLine - startLine === 0 ? endChar : lines[startLine].content.length,
+    newLines[0]
+  );
+
+  // if endLine - startLine + 1 > newLines.length insert padding into mr
+
+  for (let i = 1; i < newLines.length; i++) {
+    // insert new lines into mr
+    // update local / remote padding lines - and conflicts / decorations
+  }
 };
 
 export const replaceSubStr = (
