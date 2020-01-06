@@ -9,9 +9,13 @@ import {
   parseLocalChanges,
   parseRemoteChanges,
 } from './editors/git-conflict-to-editor-lines';
-import { getAddedDecorations } from './editors/decoration-helper';
+import {
+  getAddedDecorations,
+  getRemovedDecorations,
+} from './editors/decoration-helper';
 import { VersionType } from '../model/git-conflict';
 import { added as addedDecoration } from '../text-editor-decoration/added';
+import { removed as removedDecoration } from '../text-editor-decoration/removed';
 
 export class StateManager {
   public static data: IData;
@@ -44,7 +48,7 @@ export class StateManager {
       },
       mergeResult: {
         lines: mergeResultLines,
-        removedDecorations: [], // todo
+        removedDecorations: getRemovedDecorations(mergeResultLines),
       },
       remoteChanges: {
         lines: remoteChangesLines,
@@ -66,6 +70,10 @@ export class StateManager {
     StateManager.editors.localChanges.setDecorations(
       addedDecoration,
       StateManager.data.localChanges.addedDecorations
+    );
+    StateManager.editors.mergeResult.setDecorations(
+      removedDecoration,
+      StateManager.data.mergeResult.removedDecorations
     );
     StateManager.editors.remoteChanges.setDecorations(
       addedDecoration,

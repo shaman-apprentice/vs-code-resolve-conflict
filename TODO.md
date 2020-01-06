@@ -7,8 +7,6 @@ Technical questions:
 MVP:
 
 - readme incl. demo gif
-- align lines / padding of three views
-- apply decorations to all 3 views
 - handle manual changes in mergeResult
 - implement save / apply changes
 

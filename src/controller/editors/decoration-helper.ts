@@ -5,7 +5,28 @@ import {
   VersionType,
   ISingleGitChange,
 } from '../../model/git-conflict';
-import { IChangesLine } from '../../model/line';
+import { IChangesLine, IMergeResultLine } from '../../model/line';
+
+export const getRemovedDecorations = (lines: IMergeResultLine[]) => {
+  let currentLine = 0;
+  const removedDecorations = [] as vscode.DecorationOptions[];
+
+  while (currentLine < lines.length) {
+    if (!wasRemoved(lines[currentLine])) {
+      currentLine += 1;
+      continue;
+    }
+
+    const startLine = currentLine;
+    while (currentLine < lines.length && wasRemoved(lines[currentLine]))
+      currentLine++;
+    const endLine = currentLine - 1;
+    const endChar = lines[endLine].content.length;
+    removedDecorations.push(getRemovedDecoration(startLine, endLine, endChar));
+  }
+
+  return removedDecorations;
+};
 
 export const getAddedDecorations = (
   type: VersionType,
@@ -13,18 +34,18 @@ export const getAddedDecorations = (
   conflicts: ISingleGitChange[]
 ) => {
   let conflictIndex = 0;
-  let lineIndex = 0;
+  let currentLine = 0;
   const addedDecorations = [] as vscode.DecorationOptions[];
 
-  while (lineIndex < lines.length) {
-    if (!lines[lineIndex].wasAdded) {
-      lineIndex++;
+  while (currentLine < lines.length) {
+    if (!lines[currentLine].wasAdded) {
+      currentLine += 1;
       continue;
     }
 
-    const startLine = lineIndex;
-    while (lineIndex < lines.length && lines[lineIndex].wasAdded) lineIndex++;
-    const endLine = startLine + lineIndex - startLine - 1;
+    const startLine = currentLine;
+    while (currentLine < lines.length && lines[currentLine].wasAdded) currentLine++;
+    const endLine = currentLine - 1;
     const endChar = lines[endLine].content.length;
     if (!conflicts[conflictIndex].isResolved)
       addedDecorations.push(
@@ -70,3 +91,17 @@ export const createHover = (args: IHandleSingleConflictArgs) => {
   hover.isTrusted = true;
   return hover;
 };
+
+const wasRemoved = (line: IMergeResultLine) =>
+  line.wasRemovedLocal || line.wasRemovedRemote;
+
+const getRemovedDecoration = (
+  startLine: number,
+  endLine: number,
+  endChar: number
+): vscode.DecorationOptions => ({
+  range: new vscode.Range(
+    new vscode.Position(startLine, 0),
+    new vscode.Position(endLine, endChar)
+  ),
+});
