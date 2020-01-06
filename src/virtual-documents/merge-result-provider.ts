@@ -16,7 +16,7 @@ export class MergeResultProvider implements vscode.FileSystemProvider {
     MergeResultProvider.instance = this;
   }
 
-  static fireUpdateContent() {
+  public static fireUpdateContent() {
     const changeEvent = {
       type: vscode.FileChangeType.Changed,
       uri: StateManager.editors.mergeResult.document.uri,

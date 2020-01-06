@@ -8,6 +8,7 @@ import { cancelResolveConflict } from './commands/cancel-resolve-conflict';
 import { VersionProvider } from './virtual-documents/version-provider';
 import { MergeResultProvider } from './virtual-documents/merge-result-provider';
 import { StateManager } from './controller/state-manager';
+import { updateMergeResult } from './controller/editors/editors-utilities';
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
@@ -31,12 +32,10 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.workspace.onDidChangeTextDocument(event => {
       const scheme = event.document.uri.scheme;
 
-      if (scheme === MergeResultProvider.scheme) {
+      if (scheme === MergeResultProvider.scheme)
         event.contentChanges.forEach(cC => {
-          // start := .line, .character
-          console.log(cC.range.start, cC.range.end, cC.text);
+          updateMergeResult(cC, StateManager.data.mergeResult.lines);
         });
-      }
 
       if (scheme === VersionProvider.scheme || scheme === MergeResultProvider.scheme)
         StateManager.applyDecorations();
