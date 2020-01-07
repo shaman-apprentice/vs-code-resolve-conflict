@@ -39,7 +39,7 @@ describe('`updateMergeResult`', () => {
     expect(mrLines[2].content).toBe('2');
   });
 
-  it('works with entering a new line IN THE MIDDLE of a line', () => {
+  it('merge result content works with entering a new line IN THE MIDDLE of a line', () => {
     const mrLines = [{ content: 'zero one' }, { content: 'two' }];
 
     const changeEvent = {
