@@ -3,10 +3,13 @@ import * as path from 'path';
 
 import { VersionProvider } from '../../virtual-documents/version-provider';
 import { MergeResultProvider } from '../../virtual-documents/merge-result-provider';
-import { ILine, IMergeResultLine } from '../../model/line';
+import { ILine, IMergeResultLine, IChangesLine } from '../../model/line';
+import { StateManager } from '../state-manager';
 import {
   getLastLineContent,
   getFstLineContent,
+  insertLine,
+  shouldAddWasAddedToPaddingLines,
 } from './typing-into-merge-result-helper';
 
 export const open = async (fsPath: string) => {
@@ -52,7 +55,9 @@ export const linesToText = (lines: ILine[]) => lines.map(l => l.content).join('\
 
 export const updateMergeResultContent = (
   event: vscode.TextDocumentContentChangeEvent,
-  mrLines: IMergeResultLine[]
+  mrLines: IMergeResultLine[],
+  localLines: IChangesLine[],
+  remoteLines: IChangesLine[]
 ) => {
   const startLine = event.range.start.line;
   const startChar = event.range.start.character;
@@ -60,27 +65,51 @@ export const updateMergeResultContent = (
   const endChar = event.range.end.character;
   const newLines = event.text.split('\n');
 
+  // console.log('hieeer');
+  // console.log(startLine, startChar);
+  // console.log(endLine, endChar);
+  // console.log(event.text);
+  // console.log('hier end');
+
+  const addWasAddedToLocal = shouldAddWasAddedToPaddingLines(
+    mrLines,
+    localLines,
+    endLine,
+    endChar
+  );
+  const addWasAddedToRemote = shouldAddWasAddedToPaddingLines(
+    mrLines,
+    remoteLines,
+    endLine,
+    endChar
+  );
+
   const lastLineContent = getLastLineContent(mrLines, newLines, endLine, endChar);
   mrLines[startLine].content =
     getFstLineContent(mrLines, newLines, startLine, startChar, endLine, endChar); // prettier-ignore
 
   if (newLines.length > 1) {
-    let i = 1; // first line already dealt with before
+    let i = 1; // first line with offset 0 was already updated before
+    const insertLineFunction = (content: string) =>
+      insertLine(mrLines,startLine + i,content,localLines,addWasAddedToLocal,remoteLines,addWasAddedToRemote); // prettier-ignore
+
     for (i; i < newLines.length - 1 && i < endLine - startLine; i++)
-      mrLines[startLine + i].content = newLines[i]; // replace the content of existing replaced lines
+      mrLines[startLine + i].content = newLines[i];
     for (i; i < newLines.length - 1 && i < newLines.length; i++)
-      mrLines.splice(startLine + i, 0, { content: newLines[i] }); // insert new lines if necessary
+      insertLineFunction(newLines[i]);
 
     if (startLine + i <= endLine) mrLines[endLine].content = lastLineContent;
-    else mrLines.splice(startLine + i, 0, { content: lastLineContent });
+    else insertLineFunction(lastLineContent);
   }
 
-  // todo test it
-  // remove lines if endLine - startLine + 1 > newLines.length  / make them to padding
-  for (let i = newLines.length; i < endLine - startLine; i++) {
-    mrLines[startLine + i].content = '';
-    mrLines[startLine + i].isAlignmentPadding = true;
+  let paddingStart = startLine + newLines.length;
+  const paddingEnd = endChar === 0 ? endLine : endLine + 1;
+  for (paddingStart; paddingStart < paddingEnd; paddingStart++) {
+    mrLines[startLine + paddingStart].content = '';
+    mrLines[startLine + paddingStart].isAlignmentPadding = true;
   }
 
-  // StateManager.applyDecorations
+  StateManager.applyDecorations(); // todo remove
+  MergeResultProvider.fireUpdateContent();
+  // also local and remote versions have changed!
 };

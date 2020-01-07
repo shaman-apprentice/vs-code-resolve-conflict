@@ -31,10 +31,16 @@ export function activate(context: vscode.ExtensionContext) {
 
     vscode.workspace.onDidChangeTextDocument(event => {
       const scheme = event.document.uri.scheme;
-
+      const byEditor = (event as any).byEditor;
+      console.log('byEditor', byEditor, event.document.uri.query);
       if (scheme === MergeResultProvider.scheme)
-        event.contentChanges.forEach(cC => {
-          updateMergeResultContent(cC, StateManager.data.mergeResult.lines);
+        event.contentChanges.forEach(changeEvent => {
+          updateMergeResultContent(
+            changeEvent,
+            StateManager.data.mergeResult.lines,
+            StateManager.data.localChanges.lines,
+            StateManager.data.remoteChanges.lines
+          );
         });
 
       if (scheme === VersionProvider.scheme || scheme === MergeResultProvider.scheme)
