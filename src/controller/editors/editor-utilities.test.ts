@@ -1,3 +1,5 @@
+import * as vscode from 'vscode';
+
 import { replaceSubStr, updateMergeResult } from './editors-utilities';
 
 describe('`replaceSubStr`', () => {
@@ -22,9 +24,8 @@ describe('`updateMergeResult`', () => {
         end: { line: 0, character: 3 },
       },
       text: 'twenty-two',
-    };
+    } as vscode.TextDocumentContentChangeEvent;
 
-    // @ts-ignore
     updateMergeResult(changeEvent, mergeResultLines);
     expect(mergeResultLines[0].content).toBe('1twenty-two3');
   });
