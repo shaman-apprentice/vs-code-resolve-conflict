@@ -17,15 +17,21 @@ describe('`replaceSubStr`', () => {
 });
 
 describe('`getFstLineContent`', () => {
-  it('replaces only substring, when first line === last line', () => {
+  it('replaces only substring, when first line === last line and only one line is entered', () => {
     const lines = [{ content: '1223' }];
     const content = getFstLineContent(lines, ['twenty-two'], 0, 1, 0, 3);
     expect(content).toBe('1twenty-two3');
   });
 
-  it('replaces everything, when first line !== last line', () => {
+  it('replaces until the end, when first line !== last line', () => {
     const lines = [{ content: '1223' }, { content: 'another line' }];
     const content = getFstLineContent(lines, ['twenty-two'], 0, 1, 1, 3);
+    expect(content).toBe('1twenty-two');
+  });
+
+  it('replaces until the end when multiple lines are entered', () => {
+    const lines = [{ content: '1223' }];
+    const content = getFstLineContent(lines, ['twenty-two', 'foo'], 0, 1, 0, 3);
     expect(content).toBe('1twenty-two');
   });
 });

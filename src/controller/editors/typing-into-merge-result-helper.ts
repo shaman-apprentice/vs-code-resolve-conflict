@@ -1,7 +1,7 @@
 import { IMergeResultLine } from '../../model/line';
 
 export const getFstLineContent = (
-  mergeResultLines: IMergeResultLine[],
+  mrLines: IMergeResultLine[],
   newLines: string[],
   startLine: number,
   startChar: number,
@@ -9,19 +9,20 @@ export const getFstLineContent = (
   endChar: number
 ) =>
   replaceSubStr(
-    mergeResultLines[startLine].content,
+    mrLines[startLine].content,
     startChar,
-    endLine - startLine === 0 ? endChar : mergeResultLines[startLine].content.length,
+    endLine - startLine > 0 || newLines.length > 1
+      ? mrLines[startLine].content.length
+      : endChar,
     newLines[0]
   );
 
 export const getLastLineContent = (
-  mergeResultLines: IMergeResultLine[],
+  mrLines: IMergeResultLine[],
   newLines: string[],
   endLine: number,
   endChar: number
-) =>
-  newLines[newLines.length - 1] + mergeResultLines[endLine].content.slice(endChar);
+) => newLines[newLines.length - 1] + mrLines[endLine].content.slice(endChar);
 
 export const replaceSubStr = (
   s: string,
