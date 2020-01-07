@@ -8,7 +8,7 @@ import { cancelResolveConflict } from './commands/cancel-resolve-conflict';
 import { VersionProvider } from './virtual-documents/version-provider';
 import { MergeResultProvider } from './virtual-documents/merge-result-provider';
 import { StateManager } from './controller/state-manager';
-import { updateMergeResult } from './controller/editors/editors-utilities';
+import { updateMergeResultContent } from './controller/editors/editors-utilities';
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
@@ -34,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 
       if (scheme === MergeResultProvider.scheme)
         event.contentChanges.forEach(cC => {
-          updateMergeResult(cC, StateManager.data.mergeResult.lines);
+          updateMergeResultContent(cC, StateManager.data.mergeResult.lines);
         });
 
       if (scheme === VersionProvider.scheme || scheme === MergeResultProvider.scheme)

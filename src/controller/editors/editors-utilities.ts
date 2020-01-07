@@ -4,6 +4,10 @@ import * as path from 'path';
 import { VersionProvider } from '../../virtual-documents/version-provider';
 import { MergeResultProvider } from '../../virtual-documents/merge-result-provider';
 import { ILine, IMergeResultLine } from '../../model/line';
+import {
+  getLastLineContent,
+  getFstLineContent,
+} from './typing-into-merge-result-helper';
 
 export const open = async (fsPath: string) => {
   const { name, ext } = path.parse(fsPath);
@@ -46,7 +50,7 @@ const openRemoteChanges = async (name: string, ext: string) => {
 
 export const linesToText = (lines: ILine[]) => lines.map(l => l.content).join('\n');
 
-export const updateMergeResult = (
+export const updateMergeResultContent = (
   event: vscode.TextDocumentContentChangeEvent,
   lines: IMergeResultLine[]
 ) => {
@@ -56,24 +60,26 @@ export const updateMergeResult = (
   const endChar = event.range.end.character;
   const newLines = event.text.split('\n');
 
-  lines[startLine].content = replaceSubStr(
-    lines[startLine].content,
-    startChar,
-    endLine - startLine === 0 ? endChar : lines[startLine].content.length,
-    newLines[0]
-  );
+  lines[startLine].content =
+    getFstLineContent(lines, newLines, startLine, startChar, endLine, endChar); // prettier-ignore
 
-  // if endLine - startLine + 1 > newLines.length insert padding into mr
+  if (newLines.length > 1) {
+    let i = 1; // first line already dealt with before
+    for (i; i < newLines.length - 1 && i < endLine - startLine; i++)
+      lines[startLine + i].content = newLines[i]; // replace the content of existing replaced lines
+    for (i; i < newLines.length - 1 && i < newLines.length; i++)
+      lines.splice(startLine + i, 0, { content: newLines[i] }); // insert new lines if necessary
 
-  for (let i = 1; i < newLines.length; i++) {
-    // insert new lines into mr
-    // update local / remote padding lines - and conflicts / decorations
+    const lastLineContent = getLastLineContent(lines, newLines, endLine, endChar);
+    if (startLine + i <= endLine) lines[endLine].content = lastLineContent;
+    else lines.splice(startLine + i, 0, { content: lastLineContent });
   }
-};
 
-export const replaceSubStr = (
-  s: string,
-  start: number,
-  end: number,
-  replacement: string
-) => s.slice(0, start) + replacement + s.slice(end);
+  // remove lines if endLine - startLine + 1 > newLines.length  / make them to padding
+  for (let i = newLines.length; i < endLine - startLine; i++) {
+    lines[startLine + i].content = '';
+    lines[startLine + i].isAlignmentPadding = true;
+  }
+
+  // StateManager.applyDecorations
+};
