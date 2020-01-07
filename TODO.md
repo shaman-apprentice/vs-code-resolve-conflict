@@ -9,6 +9,7 @@ MVP:
 - readme incl. demo gif
 - handle manual changes in mergeResult
 - implement save / apply changes
+- if already open only update data and not reopen editors
 
 Nice to Haves:
 
