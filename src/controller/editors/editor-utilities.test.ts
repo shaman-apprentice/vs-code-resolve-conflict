@@ -24,6 +24,7 @@ describe('`updateMergeResult`', () => {
       text: 'twenty-two',
     };
 
+    // @ts-ignore
     updateMergeResult(changeEvent, mergeResultLines);
     expect(mergeResultLines[0].content).toBe('1twenty-two3');
   });

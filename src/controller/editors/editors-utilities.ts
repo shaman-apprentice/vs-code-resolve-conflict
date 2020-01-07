@@ -47,7 +47,7 @@ const openRemoteChanges = async (name: string, ext: string) => {
 export const linesToText = (lines: ILine[]) => lines.map(l => l.content).join('\n');
 
 export const updateMergeResult = (
-  event: vscode.TextDocumentContentChangeEvent | any, // todo workaround for test
+  event: vscode.TextDocumentContentChangeEvent,
   lines: IMergeResultLine[]
 ) => {
   const startLine = event.range.start.line;
