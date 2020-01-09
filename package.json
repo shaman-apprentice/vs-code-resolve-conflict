@@ -9,7 +9,7 @@
   "author": "shaman-apprentice",
   "publisher": "shaman-apprentice",
   "engines": {
-    "vscode": "^1.4.0"
+    "vscode": "^1.41.1"
   },
   "categories": [
     "Other"
@@ -68,8 +68,8 @@
     }
   },
   "scripts": {
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "compile-vscode": "webpack --mode development --config webpack/vscode.config.js",
+    "compile-web-view": "webpack --mode development --config webpack/web-view.config.js",
     "test": "jest"
   },
   "devDependencies": {
@@ -78,6 +78,9 @@
     "@types/vscode": "^1.40.0",
     "jest": "^24.9.0",
     "ts-jest": "^24.2.0",
-    "typescript": "^3.7.2"
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   }
 }
