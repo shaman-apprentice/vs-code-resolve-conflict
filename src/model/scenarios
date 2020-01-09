@@ -34,3 +34,16 @@ With manual added line in merge result:
 2     2     2
 2.5   2     2
 3     3     3
+
+
+Padding things:
+a  (1)    a (r 1)     a      1
+                      a2     2
+          b           b      3
+c         c (l 1)     c      4 // use local line 2&3 -> insert into merge result line 3
+c2 (2)                       5
+          d           d      6
+          e           e      7
+x  (0)    x           x      8
+
+
