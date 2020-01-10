@@ -18,6 +18,7 @@
     "merge",
     "resolve",
     "conflict",
+    "3-way",
     "git"
   ],
   "activationEvents": [
@@ -69,13 +70,16 @@
   },
   "scripts": {
     "compile-vscode": "webpack --mode development --config webpack/vscode.config.js",
-    "compile-web-view": "webpack --mode development --config webpack/web-view.config.js",
+    "compile-web-view": "webpack --mode development --config webpack/resolve-conflict-web-view.config.js",
+    "compile-watch": "concurrently --kill-others \"npm run compile-vscode -- --watch\" \"npm run compile-web-view -- --watch\"",
     "test": "jest"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "@types/node": "^12.12.8",
     "@types/vscode": "^1.40.0",
+    "concurrently": "^5.0.2",
+    "copy-webpack-plugin": "^5.1.1",
     "jest": "^24.9.0",
     "ts-jest": "^24.2.0",
     "ts-loader": "^6.2.1",

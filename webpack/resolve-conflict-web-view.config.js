@@ -1,18 +1,18 @@
 //@ts-check
-
 'use strict';
-// TODO copy css
-// TODO run in parallel
 
 const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
+
+const outputPath = path.resolve(__dirname, '..', 'out', 'web-view');
 
 /**@type {import('webpack').Configuration}*/
 const config = {
   target: 'web',
 
-  entry: './src/web-view/resolve-conflict.ts',
+  entry: './src/resolve-conflict-web-view/resolve-conflict.ts',
   output: {
-    path: path.resolve(__dirname, '..', 'out', 'web-view'),
+    path: outputPath,
     filename: 'resolve-conflict.js',
   },
   devtool: 'source-map',
@@ -31,6 +31,18 @@ const config = {
       },
     ],
   },
+  plugins: [
+    new CopyPlugin([
+      {
+        from: 'src/resolve-conflict-web-view/resolve-conflict.css',
+        to: outputPath,
+      },
+      {
+        from: 'src/resolve-conflict-web-view/resolve-conflict.html',
+        to: outputPath,
+      },
+    ]),
+  ],
 };
 
 module.exports = config;
