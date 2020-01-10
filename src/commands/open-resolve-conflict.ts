@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import { promises as fs } from 'fs';
 
 import { StateManager } from '../controller/state-manager';
 
@@ -9,19 +10,26 @@ export const openResolveConflict = (extensionCtx: vscode.ExtensionContext) => as
   const fsPath = getFsPath(cmdCtx);
   if (!fsPath) return;
 
-  const webViewResourcesPath = [extensionCtx.extensionPath, 'out', 'web-view'];
+  const webViewResourcesPath = path.join(
+    extensionCtx.extensionPath,
+    'out',
+    'web-view'
+  );
   const panel = vscode.window.createWebviewPanel(
     'shaman-apprentice.resolve-conflict',
     'TODO File Name',
     vscode.ViewColumn.One,
     {
       enableScripts: true,
-      localResourceRoots: [vscode.Uri.file(path.join(...webViewResourcesPath))],
+      localResourceRoots: [vscode.Uri.file(webViewResourcesPath)],
     }
   );
 
   //StateManager.init(fsPath);
-  panel.webview.html = getResolveConflictView(panel.webview, webViewResourcesPath);
+  panel.webview.html = await getResolveConflictView(
+    panel.webview,
+    webViewResourcesPath
+  );
 };
 
 const getFsPath = (ctx: any) => {
@@ -33,36 +41,31 @@ const getFsPath = (ctx: any) => {
   return null;
 };
 
-const getResolveConflictView = (
+const getResolveConflictView = async (
   webview: vscode.Webview,
-  resourcesPath: string[]
+  resourcesPath: string
 ) => {
-  const toUrl = (resourcePath: string[]) =>
-    webview.asWebviewUri(
-      vscode.Uri.file(path.join(...resourcesPath, ...resourcePath))
+  const getWebViewUrl = (name: string) =>
+    webview.asWebviewUri(vscode.Uri.file(path.join(resourcesPath, name)));
+
+  const webViewTemplate = await fs.readFile(
+    path.join(resourcesPath, 'resolve-conflict.html'),
+    'utf8'
+  );
+
+  return webViewTemplate
+    .replace(
+      '<meta csp-placeholder />',
+      `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; script-src ${webview.cspSource}; style-src ${webview.cspSource};"/>`
+    )
+    .replace(
+      '<link rel="stylesheet" type="text/css" href="resolve-conflict.css" />',
+      `<link rel="stylesheet" type="text/css" href="${getWebViewUrl(
+        'resolve-conflict.css'
+      )}"/>`
+    )
+    .replace(
+      '<script src="../../out/web-view/resolve-conflict.js"></script>',
+      `<script src="${getWebViewUrl('resolve-conflict.js')}"></script>`
     );
-
-  return `<!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta
-        http-equiv="Content-Security-Policy"
-        content="default-src 'none'; img-src ${
-          webview.cspSource
-        } https:; script-src ${webview.cspSource}; style-src ${webview.cspSource};"
-      />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-      <link rel="stylesheet" type="text/css" href="${toUrl([
-        'resolve-conflict.css',
-      ])}" />
-  </head>
-  <body>
-      <div>hi</div>
-      <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
-
-      <script src="${toUrl(['resolve-conflict.js'])}"></script>
-  </body>
-  </html>`;
 };
